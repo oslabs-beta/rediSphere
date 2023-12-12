@@ -9,6 +9,7 @@ const path = require('path');
 const apiRouter = require('./routes/api.js');
 const PORT = process.env.PORT;
 const redisPassword = process.env.REDIS_PASS;
+// console.log(process.env.REDIS_PASS);
 const socketHost = process.env.HOST;
 const redisPort = 17853;
 
@@ -44,15 +45,7 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-// app.use('/api', apiRouter);
-app.use('/api', async (req, res) => {
-  await redisClient.connect();
-  await redisClient.set('test', 'hello');
-  const stats = await redisClient.info('stats');
-  const hits = stats.split('\r\n');
-  console.log(hits);
-  return res.status(200);
-});
+app.use('/api', apiRouter);
 
 // app.get('/', (req, res) => {
 //   res.sendFile(path.join(__dirname, '..', 'index.html'));
