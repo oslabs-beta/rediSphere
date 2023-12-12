@@ -1,0 +1,41 @@
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+h2 {
+  text-align: center;
+}
+
+.login-box,
+.signup-box {
+  display: flex;
+  flex-direction: column;
+  background-color: aliceblue;
+  padding: 40px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+
+  input,
+  button {
+    width: 100%;
+    padding: 0;
+    height: 25px;
+    font-family: inherit;
+    border: none;
+    margin-bottom: 10px;
+  }
+
+  button {
+    margin-top: 10px;
+    background-color: aquamarine;
+    border-radius: 5px;
+  }
+
+  button:hover {
+    cursor: pointer;
+    transform: scaleY(1.05);
+  }
+}
