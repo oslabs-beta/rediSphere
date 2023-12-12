@@ -1,4 +1,5 @@
 const express = require('express');
+const Redis = require('redis');
 //import 'express-async-errors'
 //const cors = require('cors');
 //const cookieSession = require('cookie-session');
@@ -7,6 +8,24 @@ const path = require('path');
 
 const apiRouter = require('./routes/api.js');
 const PORT = process.env.PORT;
+const redisPassword = process.env.REDIS_PASS;
+const socketHost = process.env.HOST;
+const redisPort = 17853;
+
+//creating a connection to redis instance
+// const redisClient = Redis.createClient({
+//   //redis[s]://[[username][:password]@][host][:port][/db-number]
+//   //url: 'redis://alice:foobared@awesome.redis.server:6380'
+//   //   password: redisPassword,
+//   password: 'GJ2F0obKIJEQiCwR3ci03V6qLr8CFkJY',
+//   socket: {
+//     // host: socketHost,
+//     host: 'redis-17853.c326.us-east-1-3.ec2.cloud.redislabs.com',
+//     port: redisPort,
+//   },
+// });
+const redisClient = Redis.createClient();
+// redisClient.connect()
 
 const app = express();
 
@@ -26,15 +45,21 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // app.use('/api', apiRouter);
+app.use('/api', async (req, res) => {
+  await redisClient.connect();
+  await redisClient.set('test', 'hello');
+  const stats = await redisClient.info('stats');
+  const hits = stats.split('\r\n');
+  console.log(hits);
+  return res.status(200);
+});
 
 // app.get('/', (req, res) => {
 //   res.sendFile(path.join(__dirname, '..', 'index.html'));
 // });
 
 // catch-all route handler for any requests to an unknown route
-app.use((req, res) =>
-  res.status(404).send("This is not the page you're looking for...")
-);
+app.use((req, res) => res.status(404).send("This is not the page you're looking for..."));
 
 //express error handler (middleware)
 app.use((err, req, res, next) => {
