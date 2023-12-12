@@ -46,9 +46,63 @@ if (process.env.NODE_ENV === 'production') {
 
 // app.use('/api', apiRouter);
 app.use('/api', async (req, res) => {
+  //get working connection to cloud Redis instance
+  //try working connection to remote locally-hosted Redis instance
+
+  //split out the connection logic to its own function
+
+  //split out the benchmarking/load testing to its own utility
+
+  //create a statsRouter router to handle stats pathing
+  //create associated statsController
+  //create middleware for fetching stat
+  //create middleware for parsing stat
+  //create middleware for storing stat
+  //connect to redis instannce
   await redisClient.connect();
+  //set one key to get *some* data to see the performance on
   await redisClient.set('test', 'hello');
+  //response is a giant array of comma and newline separated values, with sections delinated by '# <SectionHeader>',
   const stats = await redisClient.info('stats');
+  //   //[
+  //   '# Stats',
+  //   'total_connections_received:2',
+  //   'total_commands_processed:7',
+  //   'instantaneous_ops_per_sec:0',
+  //   'total_net_input_bytes:335',
+  //   'total_net_output_bytes:4042',
+  //   'instantaneous_input_kbps:0.00',
+  //   'instantaneous_output_kbps:0.00',
+  //   'rejected_connections:0',
+  //   'sync_full:0',
+  //   'sync_partial_ok:0',
+  //   'sync_partial_err:0',
+  //   'expired_keys:0',
+  //   'expired_stale_perc:0.00',
+  //   'expired_time_cap_reached_count:0',
+  //   'expire_cycle_cpu_milliseconds:6',
+  //   'evicted_keys:0', ******
+  //   'keyspace_hits:0', *******
+  //   'keyspace_misses:0', ******
+  //   'pubsub_channels:0',
+  //   'pubsub_patterns:0',
+  //   'latest_fork_usec:0',
+  //   'migrate_cached_sockets:0',
+  //   'slave_expires_tracked_keys:0',
+  //   'active_defrag_hits:0',
+  //   'active_defrag_misses:0',
+  //   'active_defrag_key_hits:0',
+  //   'active_defrag_key_misses:0',
+  //   'tracking_total_keys:0',
+  //   'tracking_total_items:0',
+  //   'tracking_total_prefixes:0',
+  //   'unexpected_error_replies:0',
+  //   'total_reads_processed:7',
+  //   'total_writes_processed:5',
+  //   'io_threaded_reads_processed:0',
+  //   'io_threaded_writes_processed:0',
+  //   ''
+  // ]
   const hits = stats.split('\r\n');
   console.log(hits);
   return res.status(200);
