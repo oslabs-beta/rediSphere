@@ -1,0 +1,106 @@
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+h2 {
+  text-align: center;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+.login-box,
+.signup-box {
+  display: flex;
+  flex-direction: column;
+  background-color: aliceblue;
+  padding: 40px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+
+  input,
+  button {
+    width: 100%;
+    padding: 0;
+    height: 25px;
+    font-family: inherit;
+    border: none;
+    margin-bottom: 10px;
+  }
+
+  button {
+    margin-top: 10px;
+    background-color: aquamarine;
+    border-radius: 5px;
+  }
+
+  button:hover {
+    transform: scaleY(1.05);
+  }
+}
+
+header {
+  background-color: aliceblue;
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 40px;
+
+  .header-left {
+    display: flex;
+    align-items: center;
+
+    button {
+      font-family: inherit;
+      margin-left: 15px;
+      border: none;
+      background-color: inherit;
+      border-radius: 10px;
+      padding: 10px;
+      font-size: large;
+      a {
+        text-decoration: none;
+      }
+    }
+    button:hover {
+      background-color: gainsboro;
+    }
+  }
+}
+
+.widget-container {
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.widget {
+  border: solid darkgray;
+  border-radius: 20px;
+  margin: 10px;
+  padding: 20px;
+  background-color: honeydew;
+}
+
+#add-widget-button {
+  position: fixed;
+  bottom: 3vh;
+  right: 3vw;
+  height: 50px;
+  width: 50px;
+  font-size: xx-large;
+  border-radius: 50px;
+  border: none;
+  background-color: greenyellow;
+  color: white;
+  opacity: 0.5;
+}
+#add-widget-button:hover {
+  transform: scale(1.08);
+  opacity: 1;
+}
