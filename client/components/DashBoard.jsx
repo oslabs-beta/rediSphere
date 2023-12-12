@@ -11,8 +11,34 @@ const DashBoard = () => {
     setData(data.slice(-200).concat(Math.atan2(x, y)));
   }
   return (
-    <div onMouseMove={onMouseMove}>
-      <LinePlot data={data}></LinePlot>
+    <div>
+      <header>
+        <div>
+          <h1>Cache App</h1>
+        </div>
+        <div className="header-left">
+          <button>about</button>
+          <button>contact</button>
+          <a href="/login">
+            <button>logout</button>
+          </a>
+        </div>
+      </header>
+      <div className="widget-container">
+        <div className="widget" onMouseMove={onMouseMove}>
+          <LinePlot data={data}></LinePlot>
+        </div>
+        <div className="widget" onMouseMove={onMouseMove}>
+          <LinePlot data={data}></LinePlot>
+        </div>
+        <div className="widget" onMouseMove={onMouseMove}>
+          <LinePlot data={data}></LinePlot>
+        </div>
+        <div className="widget" onMouseMove={onMouseMove}>
+          <LinePlot data={data}></LinePlot>
+        </div>
+      </div>
+      <button id="add-widget-button">+</button>
     </div>
   );
 };

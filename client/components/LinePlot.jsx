@@ -21,8 +21,8 @@ const LinePlot = ({
     <svg width={width} height={height}>
       <g ref={gx} transform={`translate(0,${height - marginBottom})`} />
       <g ref={gy} transform={`translate(${marginLeft},0)`} />
-      <path fill="none" stroke="currentColor" stroke-width="1.5" d={line(data)} />
-      <g fill="white" stroke="currentColor" stroke-width="1.5">
+      <path fill="none" stroke="currentColor" strokeWidth="1.5" d={line(data)} />
+      <g fill="white" stroke="currentColor" strokeWidth="1.5">
         {data.map((d, i) => (
           <circle key={i} cx={x(i)} cy={y(d)} r="2.5" />
         ))}
