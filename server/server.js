@@ -7,6 +7,10 @@ require('dotenv').config();
 const path = require('path');
 
 const apiRouter = require('./routes/api.js');
+
+//temp before creating router
+const statsController = require('./controllers/statsController.js');
+
 const PORT = process.env.PORT;
 const redisPassword = process.env.REDIS_PASS;
 const socketHost = process.env.HOST;
@@ -45,7 +49,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // app.use('/api', apiRouter);
-app.use('/api', async (req, res) => {
+app.use('/api', statsController.getStats, async (req, res) => {
   //get working connection to cloud Redis instance
   //try working connection to remote locally-hosted Redis instance
 
@@ -59,11 +63,11 @@ app.use('/api', async (req, res) => {
   //create middleware for parsing stat
   //create middleware for storing stat
   //connect to redis instannce
-  await redisClient.connect();
-  //set one key to get *some* data to see the performance on
-  await redisClient.set('test', 'hello');
-  //response is a giant array of comma and newline separated values, with sections delinated by '# <SectionHeader>',
-  const stats = await redisClient.info('stats');
+  // await redisClient.connect();
+  // //set one key to get *some* data to see the performance on
+  // await redisClient.set('test', 'hello');
+  // //response is a giant array of comma and newline separated values, with sections delinated by '# <SectionHeader>',
+  // const stats = await redisClient.info('stats');
   //   //[
   //   '# Stats',
   //   'total_connections_received:2',
@@ -103,7 +107,7 @@ app.use('/api', async (req, res) => {
   //   'io_threaded_writes_processed:0',
   //   ''
   // ]
-  const hits = stats.split('\r\n');
+  const hits = res.locals.stats.split('\r\n');
   console.log(hits);
   return res.status(200);
 });
