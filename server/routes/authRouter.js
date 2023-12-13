@@ -25,6 +25,9 @@ router.post(
 //get username
 router.get('/whoami', userController.findUser, (req, res) => res.json(res.locals.username));
 
+//get session
+router.get('/session', sessionController.isLoggedIn, (req, res) => res.json(res.locals.session));
+
 //log out
 router.delete('/signout', sessionController.logOut, (req, res) => {
   return res.json(res.locals.loggedOut);

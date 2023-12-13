@@ -13,6 +13,8 @@ const DashBoard = () => {
     setData(data.slice(-200).concat(Math.atan2(x, y)));
   }
 
+  //delete active session in db and delete ssid cookie
+  //navigate back to homepage
   const navigate = useNavigate();
   const logout = async () => {
     const response = await fetch('/users/signout', {
@@ -23,17 +25,36 @@ const DashBoard = () => {
     return;
   };
 
-  const dispatch = useDispatch();
+  //check if there is an active session before loading dashboard
+  //empty dependency array - only triggers when dashboard component mounts
+  const fetchSession = async () => {
+    try {
+      const response = await fetch('/users/session');
+      const activeSession = await response.json();
+      if (activeSession === false) return navigate('/');
+    } catch (err) {
+      return console.log(err);
+    }
+  };
+  useEffect(() => {
+    fetchSession();
+  }, []);
 
-  const fetchUsername = () => {
-    fetch('/users/whoami')
-      .then((res) => res.json())
-      .then((username) => dispatch(SET_USER(username)))
-      .catch((err) => console.log('could not get username'));
+  //fetch username based on ssid cookie and dispatch to store in state
+  //empty dependency array - only triggers when dashboard component mounts
+  const dispatch = useDispatch();
+  const fetchUsername = async () => {
+    try {
+      const response = await fetch('/users/whoami');
+      const username = await response.json();
+      dispatch(SET_USER(username));
+    } catch (err) {
+      console.log(err);
+    }
   };
   useEffect(() => {
     fetchUsername();
-  });
+  }, []);
   const username = useSelector((store) => store.dashboard.activeUser);
 
   return (

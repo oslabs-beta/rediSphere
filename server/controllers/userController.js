@@ -6,10 +6,13 @@ const userController = {};
 userController.createUser = async (req, res, next) => {
   const { username, password } = req.body;
   try {
+    //first check if username is already saved in database
     const usernameTaken = await User.findOne({ username });
     if (usernameTaken) {
       return res.json('username taken');
     }
+
+    //create new user
     const newUser = await User.create({
       username,
       password,
@@ -26,18 +29,24 @@ userController.createUser = async (req, res, next) => {
   }
 };
 
-//verifyUser - Obtain username and password from the request body, locate the appropriate user in the database, and then authenticate the submitted password against the password stored in the database.
+//verifyUser - when user tries to sign in
 userController.verifyUser = async (req, res, next) => {
   const { username, password } = req.body;
   try {
-    const userExists = await User.findOne({ username, password });
+    //see if username is in database
+    const userExists = await User.findOne({ username });
     if (userExists) {
-      res.locals.message = 'ok';
-      res.locals.userID = userExists.id;
-      return next();
-    } else {
-      return res.json('not ok');
+      //if so, bcrypt compare password with stored hashed password
+      const passwordMatch = await userExists.comparePassword(password);
+      //if username and password match, good to go
+      if (passwordMatch) {
+        res.locals.message = 'ok';
+        res.locals.userID = userExists.id;
+        return next();
+      }
     }
+    //otherwise, login failed
+    return res.json('not ok');
   } catch (err) {
     return next({
       log: 'verifyUser error',

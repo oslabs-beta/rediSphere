@@ -1,24 +1,28 @@
 const Session = require('../models/sessionModel.js');
 const sessionController = {};
 
-//isLoggedIn - find the appropriate session for this request in the database, then verify whether or not the session is still valid.
-// sessionController.isLoggedIn = async (req, res, next) => {
-//   try {
-//     if (req.cookies.ssid) {
-//       const sessionExists = await Session.findOne({
-//         cookieId: req.cookies.ssid,
-//       });
-//       if (sessionExists) return next();
-//     }
-//     return res.redirect('/signup');
-//   } catch (err) {
-//     return next({
-//       log: 'sessionController isLoggedIn error',
-//       message: 'could not verify session',
-//       status: 500,
-//     });
-//   }
-// };
+// isLoggedIn - find the appropriate session for this request in the database, then verify whether or not the session is still valid.
+sessionController.isLoggedIn = async (req, res, next) => {
+  try {
+    if (req.cookies.ssid) {
+      const sessionExists = await Session.findOne({
+        cookieId: req.cookies.ssid,
+      });
+      if (sessionExists) {
+        res.locals.session = true;
+        return next();
+      }
+    }
+    res.locals.session = false;
+    return next();
+  } catch (err) {
+    return next({
+      log: 'sessionController isLoggedIn error',
+      message: 'could not verify session',
+      status: 500,
+    });
+  }
+};
 
 //startSession - create and save a new Session into the database.
 sessionController.startSession = async (req, res, next) => {

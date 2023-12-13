@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const SALT_WORK_FACTOR = 20;
+const SALT_WORK_FACTOR = 10;
 const bcrypt = require('bcryptjs');
 
 const userSchema = new Schema({
@@ -8,20 +8,26 @@ const userSchema = new Schema({
   password: { type: String, required: true },
 });
 
-// // ====== BCRYPT ENCRYPTION ======
-// // Password encryption using Bcrypt
-// userSchema.pre("save", async function () {
-//   if (!this.isModified("password")) return;
-//   //   console.log("about to get salty");
-//   const salt = await bcrypt.genSalt(SALT_WORK_FACTOR);
-//   const hashedPassword = await bcrypt.hash(this.password, salt);
-//   this.password = hashedPassword;
-// });
+// ====== BCRYPT ENCRYPTION ======
+// Password encryption using Bcrypt
+userSchema.pre('save', async function () {
+  try {
+    //isModified will return true if you are changing the password
+    //i.e. if user sets for the first time (or resets password)
+    if (!this.isModified('password')) return;
 
-// // Gives us a comparePassword method on the user to check if the provided Password matches the database Password
-// userSchema.methods.comparePassword = async function (providedPassword) {
-//   const isMatch = await bcrypt.compare(providedPassword, this.password);
-//   return isMatch;
-// };
+    const hash = await bcrypt.hash(this.password, SALT_WORK_FACTOR);
+    this.password = hash;
+    return;
+  } catch (err) {
+    return console.log(err);
+  }
+});
+
+// comparePassword method on the user schema to check if the provided Password matches the hashed Password
+userSchema.methods.comparePassword = function (providedPassword) {
+  const isMatch = bcrypt.compare(providedPassword, this.password);
+  return isMatch;
+};
 
 module.exports = mongoose.model('User', userSchema);
