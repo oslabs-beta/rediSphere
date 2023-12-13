@@ -10,6 +10,7 @@ const LinePlot = ({
   marginBottom = 20,
   marginLeft = 20,
 }) => {
+  // console.log(data);
   const gx = useRef();
   const gy = useRef();
   const x = d3.scaleLinear([0, data.length - 1], [marginLeft, width - marginRight]);

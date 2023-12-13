@@ -1,28 +1,29 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { SET_USER } from '../dashboardReducer.js';
+import { useDispatch } from 'react-redux';
 
 const LoginPage = () => {
-  //   const navigate = useNavigate();
-  //   const handleSubmit = async () => {
-  //     const data = {};
-  //     data.username = document.getElementById("username").value;
-  //     data.password = document.getElementById("password").value;
-  //     console.log(data);
-  //     const response = await fetch("/users", {
-  //       method: "POST",
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const handleClick = async () => {
+    const data = {};
+    data.username = document.getElementById('username').value;
+    data.password = document.getElementById('password').value;
 
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         // 'Content-Type': 'application/x-www-form-urlencoded',
-  //       },
-  //       body: JSON.stringify(data),
-  //     });
-  //     const result = await response.json();
-  //     console.log("result", result);
-  //     if (result === "username not found") return navigate("/signup");
-  //     if (result === "ok") return navigate("/homepage");
-  //     // return response;
-  //   };
+    const response = await fetch('/users/signin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    const result = await response.json();
+
+    if (result === 'not ok') return alert('login failed. try again.');
+    if (result === 'ok') {
+      dispatch(SET_USER(data.username));
+      return navigate('/dashboard');
+    }
+  };
 
   return (
     <div>
@@ -44,7 +45,9 @@ const LoginPage = () => {
           </label>
         </div>
 
-        <button id="login-button">Sign in</button>
+        <button id="login-button" onClick={handleClick}>
+          Sign in
+        </button>
       </div>
 
       <div>

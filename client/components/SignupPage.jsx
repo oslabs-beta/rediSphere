@@ -2,27 +2,27 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const SignupPage = () => {
-  //   const navigate = useNavigate();
-  //   const handleSubmit = async () => {
-  //     const data = {};
-  //     data.username = document.getElementById("username").value;
-  //     data.password = document.getElementById("password-1").value;
-  //     console.log(data);
-  //     const response = await fetch("/users/signup", {
-  //       method: "POST",
+  const navigate = useNavigate();
+  const handleClick = async () => {
+    if (document.getElementById('password-1').value !== document.getElementById('password-2').value)
+      return alert('passwords do not match. please try again.');
 
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         // 'Content-Type': 'application/x-www-form-urlencoded',
-  //       },
-  //       body: JSON.stringify(data),
-  //     });
-  //     const result = await response.json();
-  //     console.log("result", result);
-  //     if (result === "username not found") return navigate("/signup");
-  //     if (result === "ok") return navigate("/homepage");
-  //     // return response;
-  //   };
+    const data = {};
+    data.username = document.getElementById('username').value;
+    data.password = document.getElementById('password-1').value;
+
+    const response = await fetch('/users/create', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    const result = await response.json();
+
+    if (result === 'ok') return navigate('/dashboard');
+
+    if (result === 'username taken')
+      return alert('That username has been taken. Please choose another.');
+  };
 
   return (
     <div>
@@ -50,7 +50,9 @@ const SignupPage = () => {
             <input type="password" id="password-2" />
           </label>
         </div>
-        <button id="signup-button">Let's go!</button>
+        <button id="signup-button" onClick={handleClick}>
+          Let's go!
+        </button>
       </div>
 
       <div>

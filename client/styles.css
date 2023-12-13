@@ -14,8 +14,17 @@ button:hover {
   cursor: pointer;
 }
 
+.home-page {
+  width: 100vw;
+}
+
+.main-content {
+  padding: 50px;
+}
+
 .login-box,
 .signup-box {
+  width: 300px;
   display: flex;
   flex-direction: column;
   background-color: aliceblue;
