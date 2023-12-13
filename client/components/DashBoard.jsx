@@ -4,12 +4,39 @@ import { useNavigate } from 'react-router-dom';
 import LinePlot from './LinePlot.jsx';
 
 const DashBoard = () => {
-  const [data, setData] = useState(() => d3.ticks(-2, 2, 200).map(Math.sin));
+  const [data, setData] = useState([]);
 
-  function onMouseMove(event) {
-    const [x, y] = d3.pointer(event);
-    setData(data.slice(-200).concat(Math.atan2(x, y)));
-  }
+  useEffect(() => {
+    //setInteral takes:
+    //1. Callback to execute
+    //2. interval to wait between executions in ms
+    const interval = setInterval(
+      () => {
+        //call to backend
+        fetch('/api')
+          //grab data from response
+          .then((res) => {
+            res.json();
+            //add'l parsing??
+          })
+          .then((newPoint) => {
+            //add new datapoint to state
+            setData((prevData) => [...prevData, newPoint]);
+          });
+      },
+      1000, //frequency in milliseconds
+    );
+    // a setInterval object will run until you actually tell it to stop.
+    //in this case, we want it to stop if / when we unmount the component
+    //consider how we can set it differently if needed --but likely only while the graphs are rendering do we need to do this?
+  });
+
+  // const [data, setData] = useState(() => d3.ticks(-2, 2, 200).map(Math.sin));
+
+  // function onMouseMove(event) {
+  //   const [x, y] = d3.pointer(event);
+  //   setData(data.slice(-200).concat(Math.atan2(x, y)));
+  // }
   return (
     <div>
       <header>
