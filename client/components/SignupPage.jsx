@@ -18,7 +18,7 @@ const SignupPage = () => {
     });
     const result = await response.json();
 
-    if (result === 'ok') return navigate('/dashboard');
+    if (result === 'ok') return navigate('/connectredis');
 
     if (result === 'username taken')
       return alert('That username has been taken. Please choose another.');

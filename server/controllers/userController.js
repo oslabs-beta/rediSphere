@@ -2,6 +2,24 @@ const User = require('../models/userModel');
 
 const userController = {};
 
+//add Redis credentials
+userController.addRedisCredentials = async (req, res, next) => {
+  const { host, port, redisPassword } = req.body;
+  try {
+    console.log('here');
+    const id = req.cookies.ssid;
+    const update = await User.updateOne({ _id: id }, { $set: { host, port, redisPassword } });
+    res.locals.message = 'ok';
+    return next();
+  } catch (err) {
+    return next({
+      log: 'addRedisCredentials error',
+      message: 'could not addRedisCredentials',
+      status: 500,
+    });
+  }
+};
+
 //createUser - create and save a new User into the database
 userController.createUser = async (req, res, next) => {
   const { username, password } = req.body;

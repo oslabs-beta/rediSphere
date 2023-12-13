@@ -22,6 +22,11 @@ router.post(
   (req, res) => res.json(res.locals.message),
 );
 
+//connect redis
+router.put('/connect-redis', userController.addRedisCredentials, (req, res) =>
+  res.json(res.locals.message),
+);
+
 //get username
 router.get('/whoami', userController.findUser, (req, res) => res.json(res.locals.username));
 

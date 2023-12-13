@@ -7,6 +7,7 @@ import HomePage from './components/HomePage.jsx';
 import LoginPage from './components/LoginPage.jsx';
 import SignupPage from './components/SignupPage.jsx';
 import DashBoard from './components/DashBoard.jsx';
+import ConnectRedisPage from './components/ConnectRedis.jsx';
 
 const App = () => {
   return (
@@ -14,6 +15,7 @@ const App = () => {
       <Route path="/" element={<HomePage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
+      <Route path="/connectredis" element={<ConnectRedisPage />} />
       <Route path="/dashboard" element={<DashBoard />} />
     </Routes>
   );

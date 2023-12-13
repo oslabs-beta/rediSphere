@@ -6,6 +6,9 @@ const bcrypt = require('bcryptjs');
 const userSchema = new Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  host: { type: String },
+  port: { type: String },
+  redisPassword: { type: String },
 });
 
 // ====== BCRYPT ENCRYPTION ======
