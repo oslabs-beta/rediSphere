@@ -16,29 +16,26 @@ const client = createClient({
     //public endpoin URL: redis-15161.c321.us-east-1-2.ec2.cloud.redislabs.com:15161
     port: 15161,
 
-
     //can add a "reconnect strategy" which fires when a connection is closed unexpectedly
-    //reconnectStrategy: 
-        //false = do not reconnect, close client and flush command queue of pending commands
-        //retries = number of reattempts at connection, 
-      },
+    //reconnectStrategy:
+    //false = do not reconnect, close client and flush command queue of pending commands
+    //retries = number of reattempts at connection,
+  },
 });
 
 //create a connection from the client to the database
 //check for the 'ready' event, and log when it fires
-client.connect()
-.then({
-    client.on('ready', () => {
-        console.log(`Redis connection established on port ${client.socket.port}`)
-        const startTime = Date(Date.now());
-    })
+client.connect().then(() => {
+  const subscriber = client.duplicate();
+  subscriber.on('ready', () => {
+    console.log(`Redis connection established on server port 15161`);
+    const startTime = Date.now();
+  });
 });
 //client.resetInfo -- is this how we would sent a command line command to reset the info being collected?
 
 //need clarity on how much time the info was collected over
 //assuming data is lifetime for server? session?
-
-
 
 statsController.getStats = async (req, res, next) => {
   try {
@@ -48,16 +45,19 @@ statsController.getStats = async (req, res, next) => {
     client.set('Jake', 'Ryan');
     //fetch the stats from the Redis instance
     const stats = await client.info('stats');
-    console.log(stats);
+    //console.log(stats);
 
     //store the stats array on the res.locals.stats object
     res.locals.stats = stats;
+    //console.log('past storing stats');
 
     //add a timestamp field on the locals.stats object
     res.locals.stats.timestamp = new Date(Date.now());
+    //console.log('past storing timestamp');
     //add the client start time (possibly time 0 for timer series?)
-    res.locals.stats.clientStartTime = startTime;
-    console.log(res.locals.stats, res.locals.stats.timestamp, res.locals.stats.clientStartTime)
+    //res.locals.stats.clientStartTime = startTime;
+
+    console.log('stats', res.locals.stats, 'timestamp', res.locals.stats.timestamp);
     return next();
   } catch (err) {
     return next(err);
@@ -65,13 +65,13 @@ statsController.getStats = async (req, res, next) => {
 };
 
 statsController.parseStats = async (req, res, next) => {
-    try {
-        const { stats } = res.locals.stats;
-        // for charting, need value over time 
-        // create a tick object to represent one 'tick' object
-    } catch (err) {
-        return next(err);
-    };
-}
+  try {
+    const { stats } = res.locals.stats;
+    // for charting, need value over time
+    // create a tick object to represent one 'tick' object
+  } catch (err) {
+    return next(err);
+  }
+};
 
 module.exports = statsController;
