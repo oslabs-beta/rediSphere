@@ -12,10 +12,12 @@ redisController.getCacheHitsRatio = async (req, res, next) => {
   const stats = await redisClient.info('stats');
   //separate string into individual metrics and store in array
   const metrics = stats.split('\r\n');
-  const cacheHits = metrics.find((str) => str.startsWith('keyspace_hits'));
-  const cacheMisses = metrics.find((str) => str.startsWith('keyspace_misses'));
-  //   console.log('hits', cacheHits);
-  //   console.log('misses', cacheMisses);
+  let cacheHits = metrics.find((str) => str.startsWith('keyspace_hits'));
+  let cacheMisses = metrics.find((str) => str.startsWith('keyspace_misses'));
+  cacheHits = Number(cacheHits.slice(cacheHits.indexOf(':') + 1));
+  cacheMisses = Number(cacheMisses.slice(cacheMisses.indexOf(':') + 1));
+  console.log('hits', cacheHits);
+  console.log('misses', cacheMisses);
   return next();
 };
 

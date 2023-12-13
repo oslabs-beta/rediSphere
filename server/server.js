@@ -1,5 +1,5 @@
 const express = require('express');
-const Redis = require('redis');
+const { Redis, createClient } = require('redis');
 //import 'express-async-errors'
 //const cors = require('cors');
 //const cookieSession = require('cookie-session');
@@ -13,6 +13,14 @@ const redisPassword = process.env.REDIS_PASS;
 const socketHost = process.env.HOST;
 const redisPort = 17853;
 
+//temp before creating router
+const statsController = require('./controllers/statsController.js');
+
+//process.env.PORT;
+// const redisPassword = process.env.REDIS_PASS;
+// const socketHost = process.env.HOST;
+// const redisPort = 17853;
+
 //creating a connection to redis instance
 // const redisClient = Redis.createClient({
 //   //redis[s]://[[username][:password]@][host][:port][/db-number]
@@ -25,7 +33,7 @@ const redisPort = 17853;
 //     port: redisPort,
 //   },
 // });
-const redisClient = Redis.createClient();
+//const redisClient = Redis.createClient();
 // redisClient.connect()
 
 const app = express();
