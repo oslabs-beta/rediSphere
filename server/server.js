@@ -60,9 +60,11 @@ redisClient.on('error', (err) => {
 //Middleware to pass Redis instance to /api
 app.use((req, res, next) => {
   req.redisClient = redisClient;
+  // redisClient.set('test', 'jason');
+  // redisClient.get('test');
   return next();
 });
-
+//mounting api router, redis metrics middlewares
 app.use('/api', apiRouter);
 
 // app.get('/', (req, res) => {
