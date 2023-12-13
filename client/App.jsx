@@ -13,7 +13,7 @@ const App = () => {
     //setInteral takes:
     //1. Callback to execute
     //2. interval to wait between executions in ms
-    const interval = setInterval(
+    const ping = setInterval(
       () => {
         //call to backend
         fetch('/api')
@@ -29,15 +29,14 @@ const App = () => {
       },
       1000, //frequency in milliseconds
     );
-    // a setInterval object will run until you actually tell it to stop.
-    //in this case, we want it to stop if / when we unmount the component
-    //consider how we can set it differently if needed
 
     //TODO: set a conditional so that the useEffect only runs when we have a valid database connection to Redis active -- avoid erroring out/timeout
     // check w/Michelle re:auth and credentials to set strat for this
 
-    return () => clearInterval(interval);
-  }, []);
+    // should run when the app first loads, which will start the ping. setInterval executes repeatedly, automatically, runs until we clear the interval object
+    //return doesn't happen until the App component unmounts, eg, user closes app
+    return () => clearInterval(ping);
+  }, []); //passing empty dependency array --> don't reinitiate setInterval multiple times
 
   return (
     <Routes>

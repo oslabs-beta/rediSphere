@@ -15,6 +15,12 @@ const LinePlot = ({
   //in this case, it's referencing groups to represent x-axis and y-axis positions
   const gx = useRef();
   const gy = useRef();
+
+  //TODO:
+  //TODO: modify the domain for time-series data; eg, once we have timestamps set up,
+  //domain will be oldest to newest timestamps;
+  //consider a declared domain instead (eg, 1 min, 5 mins, etc) as this is going to look a little weird
+
   //create linear scales for x and y axes
   //args are :
   // 1. Domain --> abstract index values of the data (here, equal to the number of data points passed in)
