@@ -13,7 +13,8 @@ const LinePlot = ({
   //gx --> declared as useRef, allows us to reference / change the <g> tag in the code below
   // <g> is a group of elements; can be used for transforms (rotate, translate)
   //in this case, it's referencing groups to represent x-axis and y-axis positions
-  // console.log(data);
+
+  //console.log(data);
   const gx = useRef();
   const gy = useRef();
 
@@ -31,7 +32,7 @@ const LinePlot = ({
   //same thing
   //1. Domain --> minimum to maximum of actual data values passed in.
   //2. Range --> visible pixel range that those values will map to (here, equal to the pixels between bottom and top margins)
-  const y = d3.scaleLinear(d3.extent(data), [height - marginBottom, marginTop]);
+  const y = d3.scaleLinear(/* d3.extent(data) */ [0, 1], [height - marginBottom, marginTop]);
 
   //create a new line object in d3; d and i represent datapoint and index
   //in this case, we're mapping the index onto the x axis with an arrow function

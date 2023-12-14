@@ -39,6 +39,9 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 //creating a connection to redis instance
+console.log('pw: ', redisPassword);
+console.log('host: ', socketHost);
+console.log('redis port: ', redisPort);
 const redisClient = createClient({
   //   //redis[s]://[[username][:password]@][host][:port][/db-number]
   //   //url: 'redis://alice:foobared@awesome.redis.server:6380'
@@ -90,12 +93,14 @@ app.use((err, req, res, next) => {
 //start server and connect to mongoDB
 app.listen(PORT, async () => {
   console.log(`Server listening on port: ${PORT}...`);
-  try {
-    mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true });
-    console.log('Connected to Mongo DB...');
-  } catch (error) {
-    console.log(error);
-  }
+  if (process.env.MONGO_URI) {
+    try {
+      mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true });
+      console.log('Connected to Mongo DB...');
+    } catch (error) {
+      console.log(error);
+    }
+  } else console.log('No MONGO_URI found to initiate connection to MongoDB');
 });
 
 module.exports = app;

@@ -5,9 +5,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import LinePlot from './LinePlot.jsx';
 import { SET_USER } from '../dashboardReducer.js';
 
-const DashBoard = (data) => {
-  //passing an empty dependency array here so the effect will run once on startup, and then on teardown (the return fires) stop trying to ping the backend
+const DashBoard = (props) => {
   //TO-DO:
+  const { data } = props;
 
   // const [data, setData] = useState(() => d3.ticks(-2, 2, 200).map(Math.sin));
 
@@ -28,8 +28,8 @@ const DashBoard = (data) => {
     return;
   };
 
-  //check if there is an active session before loading dashboard
-  //empty dependency array - only triggers when dashboard component mounts
+  // check if there is an active session before loading dashboard
+  // empty dependency array - only triggers when dashboard component mounts
   const fetchSession = async () => {
     try {
       const response = await fetch('/users/session');
@@ -60,6 +60,12 @@ const DashBoard = (data) => {
   }, []);
   const username = useSelector((store) => store.dashboard.activeUser);
 
+  console.log('data in Dashboard: ', data, 'data length', data.length);
+  const dataArray = Object.values(data);
+  console.log('type of data prop', typeof data);
+  console.log('dataArray: ', dataArray);
+  console.log('dataArray length:', dataArray.length);
+
   return (
     <div>
       <header>
@@ -79,7 +85,8 @@ const DashBoard = (data) => {
       </header>
       <div className="widget-container">
         <div className="widget">
-          <LinePlot data={data ?? [1, 2, 3, 4, 5]}></LinePlot>
+          {/* if no data yet, display loading; once state updates w/data a re-render will occur */}
+          {data.length ? <LinePlot data={data}></LinePlot> : <p>Loading...</p>}
         </div>
       </div>
       <button id="add-widget-button">+</button>
