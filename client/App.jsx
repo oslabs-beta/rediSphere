@@ -13,29 +13,38 @@ const App = () => {
     //setInteral takes:
     //1. Callback to execute
     //2. interval to wait between executions in ms
-    const ping = setInterval(
-      () => {
+
+    let isMounted = true;
+
+    const fetchData = async () => {
+      try {
         //call to backend
-        fetch('/api')
-          //grab data from response
-          .then((res) => {
-            res.json();
-            //add'l parsing??
-          })
-          .then((newPoint) => {
-            //add new datapoint to state
-            setData((prevData) => [...prevData, newPoint]);
-          });
-      },
-      1000, //frequency in milliseconds
-    );
+        const res = await fetch('/api/cacheHitsRatio');
+        //grab data from response
+        const newData = await res.json();
+        if (isMounted) {
+          //add new datapoint to state
+          setData((prevData) => [...prevData, newData]);
+        }
+      } catch (error) {
+        console.log(error);
+        if (isMounted) {
+          setError(error);
+        }
+      }
+    };
+    const ping = setInterval(fetchData, 1000);
+    return () => {
+      // should run when the app first loads, which will start the ping. setInterval executes repeatedly, automatically, runs until we clear the interval object
+      //return doesn't happen until the App component unmounts, eg, user closes app
+      isMounted = false;
+      clearInterval(ping);
+    };
 
     //TODO: set a conditional so that the useEffect only runs when we have a valid database connection to Redis active -- avoid erroring out/timeout
     // check w/Michelle re:auth and credentials to set strat for this
 
-    // should run when the app first loads, which will start the ping. setInterval executes repeatedly, automatically, runs until we clear the interval object
-    //return doesn't happen until the App component unmounts, eg, user closes app
-    return () => clearInterval(ping);
+    //return () => clearInterval(ping);
   }, []); //passing empty dependency array --> don't reinitiate setInterval multiple times
 
   return (
