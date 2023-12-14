@@ -5,8 +5,12 @@ const { createClient } = require('redis');
 //const cookieSession = require('cookie-session');
 require('dotenv').config();
 const path = require('path');
+const cookieParser = require('cookie-parser');
+const mongoose = require('mongoose');
 
 const apiRouter = require('./routes/api.js');
+const authRouter = require('./routes/authRouter.js');
+
 const PORT = process.env.PORT;
 const redisPassword = process.env.REDIS_PASS;
 // console.log(process.env.REDIS_PASS);
@@ -20,10 +24,10 @@ const redisURL = `redis://${redisUser}:${redisPassword}@${socketHost}:${redisPor
 
 const app = express();
 
-// Body parser middleware for JSON data
-app.use(express.json());
-// Body parser middleware for URL-encoded data
-app.use(express.urlencoded({ extended: true }));
+// handle parsing request body
+app.use(cookieParser());
+app.use(express.json()); // parses body EXCEPT html
+app.use(express.urlencoded({ extended: true })); // parses html
 
 if (process.env.NODE_ENV === 'production') {
   // statically serve everything in the build folder on the route '/build'
@@ -60,14 +64,13 @@ redisClient.on('error', (err) => {
 //Middleware to pass Redis instance to /api
 app.use((req, res, next) => {
   req.redisClient = redisClient;
+  // redisClient.set('test', 'jason');
+  // redisClient.get('test');
   return next();
 });
-
+//mounting api router, redis metrics middlewares
 app.use('/api', apiRouter);
-
-// app.get('/', (req, res) => {
-//   res.sendFile(path.join(__dirname, '..', 'index.html'));
-// });
+app.use('/users', authRouter);
 
 // catch-all route handler for any requests to an unknown route
 app.use((req, res) => res.status(404).send("This is not the page you're looking for..."));
@@ -84,11 +87,15 @@ app.use((err, req, res, next) => {
   return res.status(errorObj.status).json(errorObj.message);
 });
 
-/**
- * start server
- */
-app.listen(PORT, () => {
+//start server and connect to mongoDB
+app.listen(PORT, async () => {
   console.log(`Server listening on port: ${PORT}...`);
+  try {
+    mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true });
+    console.log('Connected to Mongo DB...');
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 module.exports = app;

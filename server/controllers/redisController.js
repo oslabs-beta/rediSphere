@@ -41,12 +41,14 @@ redisController.getEvictedExpired = async (req, res, next) => {
   const stats = await redisClient.info('stats');
   //separate string into individual metrics and store in array
   const metrics = stats.split('\r\n');
-  let expired = metrics.find((str) => str.startsWith('expired_keys'));
   let evicted = metrics.find((str) => str.startsWith('evicted_keys'));
-  expired = Number(expired.slice(expired.indexOf(':') + 1));
+  let expired = metrics.find((str) => str.startsWith('expired_keys'));
   evicted = Number(evicted.slice(evicted.indexOf(':') + 1));
-  console.log('expired caches', expired);
+  expired = Number(expired.slice(expired.indexOf(':') + 1));
   console.log('evicted caches', evicted);
+  console.log('expired caches', expired);
+  res.locals.evictedExpired = { evicted: evicted, expired: expired };
+  console.log(res.locals.evictedExpired);
   return next();
 };
 

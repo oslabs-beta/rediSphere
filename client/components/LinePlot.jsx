@@ -13,6 +13,7 @@ const LinePlot = ({
   //gx --> declared as useRef, allows us to reference / change the <g> tag in the code below
   // <g> is a group of elements; can be used for transforms (rotate, translate)
   //in this case, it's referencing groups to represent x-axis and y-axis positions
+  // console.log(data);
   const gx = useRef();
   const gy = useRef();
 
