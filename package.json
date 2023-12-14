@@ -6,7 +6,7 @@
   "scripts": {
     "start": "NODE_ENV=production node server/server.js",
     "build": "webpack",
-    "dev": "rm -rf build & NODE_ENV=development nodemon server/server.js & NODE_ENV=development webpack serve --hot"
+    "dev": "rm -rf build & NODE_ENV=development nodemon server/server.js & NODE_ENV=development webpack server"
   },
   "nodemonConfig": {
     "ignore": [
@@ -19,7 +19,10 @@
   "license": "ISC",
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.7",
+    "bcryptjs": "^2.4.3",
     "browserify": "^17.0.0",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
     "d3": "^7.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.12.3",

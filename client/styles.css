@@ -6,7 +6,8 @@ body {
   font-family: 'Courier New', Courier, monospace;
 }
 
-h2 {
+h2,
+h4 {
   text-align: center;
 }
 
@@ -14,8 +15,18 @@ button:hover {
   cursor: pointer;
 }
 
+.home-page {
+  width: 100vw;
+}
+
+.main-content {
+  padding: 50px;
+}
+
 .login-box,
-.signup-box {
+.signup-box,
+.redis-connection-box {
+  width: 300px;
   display: flex;
   flex-direction: column;
   background-color: aliceblue;
