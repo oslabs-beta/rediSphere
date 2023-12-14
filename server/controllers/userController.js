@@ -6,7 +6,6 @@ const userController = {};
 userController.addRedisCredentials = async (req, res, next) => {
   const { host, port, redisPassword } = req.body;
   try {
-    console.log('here');
     const id = req.cookies.ssid;
     const update = await User.updateOne({ _id: id }, { $set: { host, port, redisPassword } });
     res.locals.message = 'ok';
