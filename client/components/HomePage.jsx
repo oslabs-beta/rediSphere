@@ -6,10 +6,10 @@ const HomePage = () => {
   return (
     <div className="home-page">
       <header>
-        <div>
+        <div className="header-left">
           <h1>Cache App</h1>
         </div>
-        <div className="header-left">
+        <div className="header-right">
           <button>about</button>
           <button>contact</button>
           <button onClick={() => navigate('/login')}>sign in</button>

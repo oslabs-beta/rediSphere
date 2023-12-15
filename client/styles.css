@@ -17,6 +17,9 @@ button:hover {
 
 .home-page {
   width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .main-content {
@@ -59,11 +62,17 @@ header {
   background-color: aliceblue;
   display: flex;
   justify-content: space-between;
-  padding: 20px 40px;
+  padding: 20px;
+  width: inherit;
 
   .header-left {
+    padding-left: 40px;
+  }
+
+  .header-right {
     display: flex;
     align-items: center;
+    padding-right: 40px;
 
     button {
       font-family: inherit;
@@ -85,17 +94,35 @@ header {
 
 .widget-container {
   padding: 20px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
+  display: grid;
+  grid-gap: 15px;
+  grid-template-columns: repeat(6, auto);
+  align-items: center;
 
-.widget {
-  border: solid darkgray;
-  border-radius: 20px;
-  margin: 10px;
-  padding: 20px;
-  background-color: honeydew;
+  .widget {
+    box-shadow: inset 0px 0px 0px 1px black;
+    height: 400px;
+    width: 550px;
+    grid-column: 1 / span 4;
+    grid-row: 1 / span 3;
+    border-radius: 20px;
+    padding: 25px;
+    background-color: rgb(255, 253, 253);
+  }
+
+  .small {
+    height: 100px;
+    width: 100px;
+    grid-column: 5;
+    grid-row: 1;
+  }
+
+  .medium {
+    height: 250px;
+    width: 250px;
+    grid-column: 5 / span 2;
+    grid-row: 2 / span 2;
+  }
 }
 
 #add-widget-button {

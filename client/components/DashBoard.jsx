@@ -2,16 +2,19 @@ import React, { useState, useEffect } from 'react';
 import * as d3 from 'd3';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import LinePlot from './LinePlot.jsx';
+
+import HitMissLinePlot from './HitMissLinePlot.jsx';
+import FreeMemory from './FreeMemory.jsx';
+
 import { SET_USER } from '../dashboardReducer.js';
 
 const DashBoard = () => {
-  const [data, setData] = useState(() => d3.ticks(-2, 2, 200).map(Math.sin));
+  // const [data, setData] = useState(() => d3.ticks(-2, 2, 200).map(Math.sin));
 
-  function onMouseMove(event) {
-    const [x, y] = d3.pointer(event);
-    setData(data.slice(-200).concat(Math.atan2(x, y)));
-  }
+  // function onMouseMove(event) {
+  //   const [x, y] = d3.pointer(event);
+  //   setData(data.slice(-200).concat(Math.atan2(x, y)));
+  // }
 
   //delete active session in db and delete ssid cookie
   //navigate back to homepage
@@ -58,12 +61,12 @@ const DashBoard = () => {
   const username = useSelector((store) => store.dashboard.activeUser);
 
   return (
-    <div>
+    <div className="home-page">
       <header>
-        <div>
+        <div className="header-left">
           <h1>Cache App</h1>
         </div>
-        <div className="header-left">
+        <div className="header-right">
           <button>about</button>
           <button>contact</button>
           <button onClick={logout}>
@@ -75,18 +78,13 @@ const DashBoard = () => {
         </div>
       </header>
       <div className="widget-container">
-        <div className="widget" onMouseMove={onMouseMove}>
-          <LinePlot data={data}></LinePlot>
+        <div className="widget">
+          <HitMissLinePlot></HitMissLinePlot>
         </div>
-        <div className="widget" onMouseMove={onMouseMove}>
-          <LinePlot data={data}></LinePlot>
+        <div className="widget small">
+          <FreeMemory></FreeMemory>
         </div>
-        <div className="widget" onMouseMove={onMouseMove}>
-          <LinePlot data={data}></LinePlot>
-        </div>
-        <div className="widget" onMouseMove={onMouseMove}>
-          <LinePlot data={data}></LinePlot>
-        </div>
+        <div className="widget medium"></div>
       </div>
       <button id="add-widget-button">+</button>
     </div>

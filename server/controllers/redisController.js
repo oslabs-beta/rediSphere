@@ -1,7 +1,48 @@
-const express = require('express');
-// const Redis = require('redis');
-// const redisClient = Redis.createClient();
+const { createClient } = require('redis');
+const User = require('../models/userModel');
 const redisController = {};
+
+//close redis connection
+//prevent ERR max number of clients reached
+redisController.disconnectRedis = async (req, res, next) => {
+  try {
+    req.redisClient.disconnect();
+    console.log('disconnected!');
+    return next();
+  } catch (err) {
+    return next({
+      log: `redisController.disconnectRedis error: ${err}`,
+      message: 'could not disconnect Redis client',
+      status: 500,
+    });
+  }
+};
+
+//connect to user's redis instance stored in user database
+redisController.connectUserRedis = async (req, res, next) => {
+  try {
+    const userID = req.cookies.ssid;
+    const user = await User.findById(userID);
+    const { host, port, redisPassword } = user;
+    const redisClient = createClient({
+      password: redisPassword,
+      socket: {
+        host,
+        port,
+      },
+    });
+    const connect = await redisClient.connect();
+    console.log(`Connected to Redis Server: ${host} on port ${port}`);
+    req.redisClient = redisClient;
+    return next();
+  } catch (err) {
+    return next({
+      log: `redisController.connectUserRedis error: ${err}`,
+      message: 'could not connect to user Redis instance',
+      status: 500,
+    });
+  }
+};
 
 //efficiency of cache usage metric
 redisController.getCacheHitsRatio = async (req, res, next) => {
