@@ -6,7 +6,7 @@
   "scripts": {
     "start": "NODE_ENV=production node server/server.js",
     "build": "webpack",
-    "dev": "rm -rf build & NODE_ENV=development nodemon server/server.js & NODE_ENV=development webpack serve --hot"
+    "dev": "rm -rf build & NODE_ENV=development nodemon server/server.js & NODE_ENV=development webpack server"
   },
   "nodemonConfig": {
     "ignore": [
@@ -18,19 +18,24 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "dotenv": "^16.3.1",
-    "mongoose": "^5.11.9",
-    "node-fetch": "^2.3.0",
     "@reduxjs/toolkit": "^1.9.7",
+    "bcryptjs": "^2.4.3",
     "browserify": "^17.0.0",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "d3": "^7.8.5",
+    "dotenv": "^16.3.1",
     "express": "^4.12.3",
     "gulp": "^4.0.2",
+    "mongoose": "^5.11.9",
+    "node-fetch": "^2.3.0",
     "prop-types": "^15.6.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router": "^4.3.1",
     "react-redux": "^8.1.3",
+    "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
+    "redis": "^4.6.11",
     "redux": "^4.0.5"
   },
   "devDependencies": {

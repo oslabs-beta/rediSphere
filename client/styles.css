@@ -1,0 +1,148 @@
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+h2,
+h4 {
+  text-align: center;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+.home-page {
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.main-content {
+  padding: 50px;
+}
+
+.login-box,
+.signup-box,
+.redis-connection-box {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  background-color: aliceblue;
+  padding: 40px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+
+  input,
+  button {
+    width: 100%;
+    padding: 0;
+    height: 25px;
+    font-family: inherit;
+    border: none;
+    margin-bottom: 10px;
+  }
+
+  button {
+    margin-top: 10px;
+    background-color: aquamarine;
+    border-radius: 5px;
+  }
+
+  button:hover {
+    transform: scaleY(1.05);
+  }
+}
+
+header {
+  background-color: aliceblue;
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  width: inherit;
+
+  .header-left {
+    padding-left: 40px;
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    padding-right: 40px;
+
+    button {
+      font-family: inherit;
+      margin-left: 15px;
+      border: none;
+      background-color: inherit;
+      border-radius: 10px;
+      padding: 10px;
+      font-size: large;
+      a {
+        text-decoration: none;
+      }
+    }
+    button:hover {
+      background-color: gainsboro;
+    }
+  }
+}
+
+.widget-container {
+  padding: 20px;
+  display: grid;
+  grid-gap: 15px;
+  grid-template-columns: repeat(6, auto);
+  align-items: center;
+
+  .widget {
+    box-shadow: inset 0px 0px 0px 1px black;
+    height: 400px;
+    width: 550px;
+    grid-column: 1 / span 4;
+    grid-row: 1 / span 3;
+    border-radius: 20px;
+    padding: 25px;
+    background-color: rgb(255, 253, 253);
+  }
+
+  .small {
+    height: 100px;
+    width: 100px;
+    grid-column: 5;
+    grid-row: 1;
+  }
+
+  .medium {
+    height: 250px;
+    width: 250px;
+    grid-column: 5 / span 2;
+    grid-row: 2 / span 2;
+  }
+}
+
+#add-widget-button {
+  position: fixed;
+  bottom: 3vh;
+  right: 3vw;
+  height: 50px;
+  width: 50px;
+  font-size: xx-large;
+  border-radius: 50px;
+  border: none;
+  background-color: greenyellow;
+  color: white;
+  opacity: 0.5;
+}
+#add-widget-button:hover {
+  transform: scale(1.08);
+  opacity: 1;
+}
