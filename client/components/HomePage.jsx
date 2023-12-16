@@ -1,21 +1,11 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+
+import Header from './Header';
 
 const HomePage = () => {
-  const navigate = useNavigate();
   return (
     <div className="home-page">
-      <header>
-        <div className="header-left">
-          <h1>Cache App</h1>
-        </div>
-        <div className="header-right">
-          <button>about</button>
-          <button>contact</button>
-          <button onClick={() => navigate('/login')}>sign in</button>
-          <button onClick={() => navigate('/signup')}>sign up</button>
-        </div>
-      </header>
+      <Header />
       <div className="main-content">
         <h1>Do you like visualizing Redis metrics?</h1>
         <h3>We have just the app for you.</h3>
