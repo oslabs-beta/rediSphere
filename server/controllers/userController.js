@@ -36,6 +36,7 @@ userController.createUser = async (req, res, next) => {
     });
     res.locals.message = 'ok';
     res.locals.userID = newUser.id;
+    res.locals.username = username;
     return next();
   } catch (err) {
     return next({
@@ -59,6 +60,7 @@ userController.verifyUser = async (req, res, next) => {
       if (passwordMatch) {
         res.locals.message = 'ok';
         res.locals.userID = userExists.id;
+        res.locals.username = username;
         return next();
       }
     }
