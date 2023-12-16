@@ -53,21 +53,30 @@ redisController.getCacheHitsRatio = async (req, res, next) => {
   // //set one key to get *some* data to see the performance on
   // await redisClient.set('test', 'hello');
   //response is a giant array of comma and newline separated values, with sections delinated by '# <SectionHeader>',
-  const stats = await redisClient.info('stats');
+  const stats = await redisClient.info();
   //separate string into individual metrics and store in array
   const metrics = stats.split('\r\n');
+
   let cacheHits = metrics.find((str) => str.startsWith('keyspace_hits'));
   let cacheMisses = metrics.find((str) => str.startsWith('keyspace_misses'));
+  let timestamp = metrics.find((str) => str.startsWith('server_time_usec'));
+
   cacheHits = Number(cacheHits.slice(cacheHits.indexOf(':') + 1));
   cacheMisses = Number(cacheMisses.slice(cacheMisses.indexOf(':') + 1));
+  timestamp = Number(timestamp.slice(timestamp.indexOf(':') + 1));
+
   console.log('hits', cacheHits);
   console.log('misses', cacheMisses);
+  console.log('timestamp in microseconds since unix epoch', timestamp);
+
   //if ratio lower than -0.8,  then a significant amount of the requested keys are evicted, expired, or do not exist at all
-  if (cacheHits + cacheMisses === 0) res.locals.cacheHitRatio = 0;
-  else {
-    res.locals.cacheHitRatio = cacheHits / (cacheHits + cacheMisses);
-  }
-  console.log('cachehitratio', res.locals.cacheHitRatio);
+
+  res.locals.stats = {
+    cacheHitRatio: cacheHits + cacheMisses === 0 ? 0 : cacheHits / (cacheHits + cacheMisses),
+    timestamp: timestamp,
+  };
+
+  // console.log('cachehitratio', res.locals.cacheHitRatio);
   return next();
 };
 

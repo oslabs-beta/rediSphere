@@ -4,20 +4,33 @@ import FreeMemory from './FreeMemory.jsx';
 import Header from './Header.jsx';
 
 const DashBoard = () => {
-  // const [data, setData] = useState(() => d3.ticks(-2, 2, 200).map(Math.sin));
+  const [data, setData] = useState([]);
 
-  // function onMouseMove(event) {
-  //   const [x, y] = d3.pointer(event);
-  //   setData(data.slice(-200).concat(Math.atan2(x, y)));
-  // }
+  //get cache hits ratio
+  const fetchData = async () => {
+    try {
+      const res = await fetch('/api/cacheHitsRatio');
+      const newData = await res.json();
+      return newData;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //everytime data is updated, set timeout is called again
+  useEffect(() => {
+    setTimeout(() => {
+      fetchData().then((data) => {
+        setData((prevData) => [...prevData, data]);
+      });
+    }, 1000);
+  }, [data]);
 
   return (
     <div className="home-page">
       <Header />
       <div className="widget-container">
-        <div className="widget">
-          <HitMissLinePlot></HitMissLinePlot>
-        </div>
+        <div className="widget">{<HitMissLinePlot data={data}></HitMissLinePlot>}</div>
         <div className="widget small">
           <FreeMemory></FreeMemory>
         </div>
