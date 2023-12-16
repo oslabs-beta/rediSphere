@@ -25,11 +25,13 @@ redisController.getCacheHitsRatio = async (req, res, next) => {
   timestamp = Number(timestamp.slice(timestamp.indexOf(':') + 1));
   console.log('hits', cacheHits);
   console.log('misses', cacheMisses);
-  console.log('timestamp in ms', timestamp);
+  console.log('timestamp in microseconds since unix epoch', timestamp);
   //if ratio lower than -0.8,  then a significant amount of the requested keys are evicted, expired, or do not exist at all
-  if (cacheHits + cacheMisses === 0) res.locals.cacheHitRatio = 0;
-  else res.locals.cacheHitRatio = cacheHits / (cacheHits + cacheMisses);
-  console.log('cachehitratio', res.locals.cacheHitRatio);
+  res.locals.stats = {
+    cacheHitRatio: cacheHits + cacheMisses === 0 ? 0 : cacheHits / (cacheHits + cacheMisses),
+    timestamp: timestamp,
+  };
+  //console.log('cachehitratio', res.locals.stats);
   return next();
 };
 

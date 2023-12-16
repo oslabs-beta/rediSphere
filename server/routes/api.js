@@ -7,7 +7,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/cacheHitsRatio', redisController.getCacheHitsRatio, (req, res) => {
-  return res.status(200).json(res.locals.cacheHitRatio);
+  return res.status(200).json(res.locals.stats);
 });
 
 router.get('/evictedExpired', redisController.getEvictedExpired, (req, res) => {

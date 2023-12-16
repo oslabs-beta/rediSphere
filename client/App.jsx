@@ -12,7 +12,7 @@ import fetchData from './utils/fetchData.js';
 let hasRan = false;
 
 const App = () => {
-  const [data, setData] = useState([0]);
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     const ping = !hasRan
@@ -20,6 +20,7 @@ const App = () => {
           //check for global has ran (extra sure this only runs once, even in dev mode)
           hasRan = true; //flip hasRan to true --> won't run again
           fetchData().then((data) => {
+            console.log('data inside useEffect', data);
             setData((prevData) => [...prevData, data]); //run setData, appending the fetchedData from the util method
           });
         }, 1000)
@@ -28,7 +29,7 @@ const App = () => {
     return () => {
       // should run when the app first loads, which will start the ping. setInterval executes repeatedly, automatically, runs until we clear the interval object
       //return doesn't happen until the App component unmounts, eg, user closes app
-      hasRan = false;
+      //hasRan = false;
       if (ping) clearInterval(ping);
       console.log('ended ping');
     };

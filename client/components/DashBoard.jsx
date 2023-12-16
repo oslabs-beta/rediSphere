@@ -8,7 +8,12 @@ import { SET_USER } from '../dashboardReducer.js';
 const DashBoard = (props) => {
   //TO-DO:
   const { data } = props;
+  const cacheHitRatio = data.cacheHitRatio;
+  const timestamp = data.timestamp;
 
+  console.log('full data obj:', data);
+  console.log('cacheHit', cacheHitRatio);
+  console.log('timestamp: ', timestamp);
   // const [data, setData] = useState(() => d3.ticks(-2, 2, 200).map(Math.sin));
 
   // function onMouseMove(event) {
