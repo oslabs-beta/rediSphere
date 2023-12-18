@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import HitMissLinePlot from './HitMissLinePlot.jsx';
 import FreeMemory from './FreeMemory.jsx';
 import Header from './Header.jsx';
+import Footer from './Footer.jsx';
 
 const DashBoard = () => {
   const [data, setData] = useState([]);
@@ -37,6 +38,7 @@ const DashBoard = () => {
         <div className="widget medium"></div>
       </div>
       <button id="add-widget-button">+</button>
+      <Footer />
     </div>
   );
 };

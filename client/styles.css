@@ -146,3 +146,17 @@ header {
   transform: scale(1.08);
   opacity: 1;
 }
+
+footer {
+  position: absolute;
+  bottom: 10px;
+  .github-logo {
+    margin-left: 10px;
+    height: 20px;
+    width: 20px;
+    transition: transform 0.3s ease-in-out;
+  }
+  .github-logo:hover {
+    transform: rotate(360deg) scale(1.2);
+  }
+}
