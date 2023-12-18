@@ -31,7 +31,7 @@ redisController.connectUserRedis = async (req, res, next) => {
         port,
       },
     });
-    const connect = await redisClient.connect();
+    redisClient.connect();
     console.log(`Connected to Redis Server: ${host} on port ${port}`);
     req.redisClient = redisClient;
     return next();

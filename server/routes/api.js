@@ -25,13 +25,25 @@ router.get(
     return res.status(200).json(res.locals.evictedExpired);
   },
 );
-
-router.get('/latency', redisController.getResponseTimes, (req, res) => {
-  return res.status(200).json(res.locals.latency);
-});
-
-router.get('/memory', redisController.getMemory, (req, res) => {
-  return res.status(200).json(res.locals.memory);
-});
+//sends latency to the front
+router.get(
+  '/latency',
+  redisController.connectUserRedis,
+  redisController.getResponseTimes,
+  redisController.disconnectRedis,
+  (req, res) => {
+    return res.status(200).json(res.locals.latency);
+  },
+);
+//sends memory usage to the front
+router.get(
+  '/memory',
+  redisController.connectUserRedis,
+  redisController.getMemory,
+  redisController.disconnectRedis,
+  (req, res) => {
+    return res.status(200).json(res.locals.memory);
+  },
+);
 
 module.exports = router;
