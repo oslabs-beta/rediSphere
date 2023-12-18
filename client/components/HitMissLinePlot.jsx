@@ -92,8 +92,8 @@ const LinePlot = ({
             <circle key={i} cx={x(d.timestamp)} cy={y(d.cacheHitRatio)} r=".75" />
           ))}
         </g>
-        <path fill="none" stroke="red" strokeWidth="1.5" d={line(misses)} />
-        <g fill="none" stroke="red" strokeWidth="1.5">
+        <path fill="none" stroke="orange" strokeWidth="1.5" d={line(misses)} />
+        <g fill="none" stroke="orange" strokeWidth="1.5">
           {misses.map((d, i) => (
             <circle key={i} cx={x(d.timestamp)} cy={y(d.cacheHitRatio)} r=".75" />
           ))}
