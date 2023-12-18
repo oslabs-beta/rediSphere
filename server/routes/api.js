@@ -12,7 +12,7 @@ router.get(
   redisController.getCacheHitsRatio,
   redisController.disconnectRedis,
   (req, res) => {
-    return res.status(200).json(res.locals.cacheHitRatio);
+    return res.status(200).json(res.locals.stats);
   },
 );
 //sends evicted and expired to the front
