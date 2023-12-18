@@ -5,7 +5,6 @@ require('dotenv').config();
 const redisPassword = process.env.REDIS_PASS;
 const socketHost = process.env.HOST;
 const redisPort = process.env.REDIS_PORT;
-const redisUser = process.env.REDIS_USER;
 //const redisURL = `redis://${redisUser}:${redisPassword}@${socketHost}:${redisPort}`;
 //HELPER FUNCTIONS
 
@@ -35,7 +34,7 @@ function runRandomOp(client) {
 
   if (Math.random() < 0.5) {
     //client.set(key, generateRandomValue());
-    client.setEx(key, 20, generateRandomValue());
+    client.setEx(key, 1, generateRandomValue());
   } else {
     client.get(key, (err, res) => {
       if (err) {
@@ -49,7 +48,7 @@ function runRandomOp(client) {
 // Generate random string keys and values
 //const totalKeys = 50;
 function generateRandomKey(totalKeys) {
-  return (randomBytes(50) % totalKeys).toString();
+  return (randomBytes(10) % totalKeys).toString();
 }
 
 function generateRandomValue() {
@@ -61,8 +60,8 @@ function generateRandomValue() {
 module.exports = function createLoadTest({
   totalClients = 1,
   totalOps = 1000,
-  timeLimit = 60, // seconds
-  totalKeys = 50,
+  timeLimit = 60,
+  totalKeys = 50, // seconds
 }) {
   const clients = [];
 

@@ -28,10 +28,11 @@ router.put('/connect-redis', userController.addRedisCredentials, (req, res) =>
 );
 
 //get username
-router.get('/whoami', userController.findUser, (req, res) => res.json(res.locals.username));
+//not being used
+// router.get('/whoami', userController.findUser, (req, res) => res.json(res.locals.username));
 
 //get session
-router.get('/session', sessionController.isLoggedIn, (req, res) => res.json(res.locals.session));
+router.get('/session', sessionController.isLoggedIn, (req, res) => res.json(res.locals));
 
 //log out
 router.delete('/signout', sessionController.logOut, (req, res) => {
