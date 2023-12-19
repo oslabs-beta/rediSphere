@@ -107,8 +107,8 @@ header {
     box-shadow: inset 0px 0px 0px 1px black;
     height: 400px;
     width: 550px;
-    grid-column: 1 / span 4;
-    grid-row: 1 / span 3;
+    /* grid-column: 1 / span 4;
+    grid-row: 1 / span 3; */
     border-radius: 20px;
     padding: 25px;
     background-color: rgb(255, 253, 253);
