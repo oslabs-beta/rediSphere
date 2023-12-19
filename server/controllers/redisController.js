@@ -7,7 +7,7 @@ const redisController = {};
 redisController.disconnectRedis = async (req, res, next) => {
   try {
     req.redisClient.disconnect();
-    console.log('disconnected!');
+    // console.log('disconnected!');
     return next();
   } catch (err) {
     return next({
@@ -32,7 +32,7 @@ redisController.connectUserRedis = async (req, res, next) => {
       },
     });
     const connect = await redisClient.connect();
-    console.log(`Connected to Redis Server: ${host} on port ${port}`);
+    // console.log(`Connected to Redis Server: ${host} on port ${port}`);
     req.redisClient = redisClient;
     return next();
   } catch (err) {
@@ -65,9 +65,9 @@ redisController.getCacheHitsRatio = async (req, res, next) => {
   cacheMisses = Number(cacheMisses.slice(cacheMisses.indexOf(':') + 1));
   timestamp = Number(timestamp.slice(timestamp.indexOf(':') + 1));
 
-  console.log('hits', cacheHits);
-  console.log('misses', cacheMisses);
-  console.log('timestamp in microseconds since unix epoch', timestamp);
+  // console.log('hits', cacheHits);
+  // console.log('misses', cacheMisses);
+  // console.log('timestamp in microseconds since unix epoch', timestamp);
 
   //if ratio lower than -0.8,  then a significant amount of the requested keys are evicted, expired, or do not exist at all
 

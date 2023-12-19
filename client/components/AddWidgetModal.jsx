@@ -36,7 +36,15 @@ const Modal = () => {
     <div>
       <div className="overlay" id="overlay"></div>
       <div className="modal" id="add-widget">
-        <button className="exit-button">X</button>
+        <button
+          id="x-button"
+          onClick={() => {
+            document.getElementById('overlay').classList.remove('active');
+            document.getElementById('add-widget').classList.remove('active');
+          }}
+        >
+          ✖
+        </button>
         <p>
           <strong>{'Add a widget:'}</strong>
         </p>

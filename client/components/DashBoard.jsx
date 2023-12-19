@@ -26,11 +26,32 @@ const DashBoard = () => {
     fetchWidgets();
   }, []);
 
+  //delete a widget
+  const deleteWidget = async (index) => {
+    try {
+      const deleted = await fetch('/users/delete-widget/' + index, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      const widgetArray = await deleted.json();
+      dispatch(SET_WIDGETS(widgetArray));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   //map widget list (ex [['large', 'hitmiss']]) to a component
   const widgetDisplay = [];
   widgets.forEach((widget, index) => {
     widgetDisplay.push(
       <div className={`widget ${widget[0]}`} id={index} key={index}>
+        <button
+          onClick={() => {
+            deleteWidget(index);
+          }}
+        >
+          ✖
+        </button>
         {nameToComponent[widget[1]][widget[0]]}
       </div>,
     );

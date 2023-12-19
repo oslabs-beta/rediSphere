@@ -19,7 +19,27 @@ userController.getWidgets = async (req, res, next) => {
   }
 };
 
-//add widget to user's widgets array
+//get user's widgets array
+userController.deleteWidget = async (req, res, next) => {
+  const indexToDelete = req.params.index;
+  try {
+    const id = req.cookies.ssid;
+    const user = await User.findById(id);
+    const newWidgets = user.widgets.toSpliced(indexToDelete, 1);
+    console.log('newWidgets: ', newWidgets);
+    const update = await user.updateOne({ $set: { widgets: newWidgets } });
+    res.locals.widgets = newWidgets;
+    return next();
+  } catch (err) {
+    return next({
+      log: 'userController deleteWidgets error',
+      message: 'could not delete widget',
+      status: 500,
+    });
+  }
+};
+
+//add widget to user's widgets array, sends back whole widgets array
 userController.addWidget = async (req, res, next) => {
   const { newWidget } = req.body;
   try {

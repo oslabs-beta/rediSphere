@@ -7,8 +7,13 @@ const router = express.Router();
 //get user's widgets
 router.get('/widgets', userController.getWidgets, (req, res) => res.json(res.locals.widgets));
 
-//add widgets to user's widgets array
+//add widgets to user's widgets array, sends back whole widgets array
 router.put('/add-widget', userController.addWidget, (req, res) => res.json(res.locals.widgets));
+
+//add widgets to user's widgets array
+router.delete('/delete-widget/:index', userController.deleteWidget, (req, res) =>
+  res.json(res.locals.widgets),
+);
 
 // post req to sign up, once signed up, redirect to dashboard
 router.post(

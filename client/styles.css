@@ -111,6 +111,24 @@ header {
     align-items: center;
     justify-content: center;
     text-align: center;
+    padding: 0 10px;
+
+    button {
+      background-color: pink;
+      border: none;
+      border-radius: 20px;
+      height: 20px;
+      width: 20px;
+      text-align: center;
+      align-self: flex-start;
+      opacity: 0.2;
+      padding: 0;
+      color: white;
+    }
+    button:hover {
+      opacity: 1;
+      transform: scale(1.08);
+    }
   }
 
   .small {
@@ -183,22 +201,24 @@ svg {
   transform: scale(0);
   transition: 200ms ease-in-out;
   border-radius: 10px;
+  padding: 20px;
 
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 
-  .exit-button {
-    position: relative;
-    right: 0;
-  }
-
   button {
     font: inherit;
     height: 100px;
     width: 100px;
     margin: 10px;
+    background-color: white;
+    border: none;
+    border-radius: 20px;
+  }
+  button:hover {
+    background-color: gainsboro;
   }
 }
 
@@ -221,6 +241,23 @@ svg {
 
 .overlay.active {
   display: flex;
+}
+
+#x-button {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  border-radius: 30px;
+  background-color: pink;
+  color: white;
+  border: none;
+  opacity: 0.8;
+}
+#x-button:hover {
+  opacity: 1;
 }
 
 footer {
