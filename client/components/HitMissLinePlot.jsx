@@ -113,9 +113,37 @@ const LinePlot = ({
         <g ref={gy} transform={`translate(${marginLeft},0)`} />
         <text
           className="chart-label"
-          transform={`translate(${(width - marginRight) / 2 - 20}, ${height - marginBottom + 30})`}
+          transform={`translate(${(width - marginRight) / 2 - 20}, ${height - marginBottom + 35})`}
         >
           {'UTC Time'}
+        </text>
+        <circle
+          cx={(width - marginRight) * 0.75}
+          cy={height - marginBottom - 70}
+          r="5"
+          style={{ fill: 'blue' }}
+        />
+        <text
+          className="legend-label"
+          transform={`translate(${(width - marginRight) * 0.75 + 10}, ${
+            height - marginBottom - 65
+          })`}
+        >
+          {'hits'}
+        </text>
+        <circle
+          cx={(width - marginRight) * 0.75}
+          cy={height - marginBottom - 50}
+          r="5"
+          style={{ fill: 'orange' }}
+        />
+        <text
+          className="legend-label"
+          transform={`translate(${(width - marginRight) * 0.75 + 10}, ${
+            height - marginBottom - 45
+          })`}
+        >
+          {'misses'}
         </text>
         <path fill="none" stroke="blue" strokeWidth="1.5" d={line(formattedData)} />
         <g fill="none" stroke="blue" strokeWidth="1.5">

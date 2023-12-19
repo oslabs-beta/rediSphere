@@ -62,7 +62,7 @@ header {
   background-color: aliceblue;
   display: flex;
   justify-content: space-between;
-  padding: 20px;
+  padding: 0 20px;
   width: inherit;
 
   .header-left {
@@ -97,7 +97,7 @@ header {
 }
 
 .widget-container {
-  margin-top: 10px;
+  margin-top: 20px;
   display: grid;
   grid-template-columns: repeat(8, 150px);
 
@@ -142,10 +142,14 @@ svg {
   g {
     font-family: inherit;
     font-size: xx-small;
+    font-weight: bold;
   }
   .chart-label {
     font-size: small;
     font-weight: bold;
+  }
+  .legend-label {
+    font-size: small;
   }
 }
 
