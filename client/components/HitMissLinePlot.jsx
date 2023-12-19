@@ -2,7 +2,6 @@ import * as d3 from 'd3';
 import React, { useRef, useEffect, useState } from 'react';
 
 const LinePlot = ({
-  data,
   width = 550,
   height = 400,
   marginTop = 20,
@@ -10,6 +9,26 @@ const LinePlot = ({
   marginBottom = 20,
   marginLeft = 20,
 }) => {
+  const [data, setData] = useState([]);
+
+  //get cache hits ratio
+  const fetchData = async () => {
+    try {
+      const res = await fetch('/api/cacheHitsRatio');
+      const newData = await res.json();
+      setData([...data, newData]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // every time cache hit data is updated, set timeout is called again
+  useEffect(() => {
+    setTimeout(() => {
+      fetchData();
+    }, 1000);
+  }, [data]);
+
   //take timestamp and overwrite with JS time instaed of server's native epoch time which is in microseconds
   //divide by 1000 to go from micro seconds to milli seconds
   let formattedData = data.map((d) => {
@@ -85,7 +104,19 @@ const LinePlot = ({
     return (
       <svg width={width} height={height}>
         <g ref={gx} transform={`translate(0,${height - marginBottom})`} />
+        <text
+          className="chart-label"
+          transform={`translate(-15,${(height - marginBottom) / 2 + 75}) rotate(-90)`}
+        >
+          {'Cache Hit Ratio'}
+        </text>
         <g ref={gy} transform={`translate(${marginLeft},0)`} />
+        <text
+          className="chart-label"
+          transform={`translate(${(width - marginRight) / 2 - 20}, ${height - marginBottom + 30})`}
+        >
+          {'UTC Time'}
+        </text>
         <path fill="none" stroke="blue" strokeWidth="1.5" d={line(formattedData)} />
         <g fill="none" stroke="blue" strokeWidth="1.5">
           {formattedData.map((d, i) => (

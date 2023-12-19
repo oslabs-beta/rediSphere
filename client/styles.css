@@ -105,7 +105,6 @@ header {
     box-sizing: border-box;
     border: 1px solid black;
     border-radius: 20px;
-    padding: 25px;
     background-color: rgb(255, 253, 253);
     display: flex;
     flex-direction: column;
@@ -137,6 +136,19 @@ header {
   }
 }
 
+svg {
+  overflow: visible;
+  margin: 0 0 15px 15px;
+  g {
+    font-family: inherit;
+    font-size: xx-small;
+  }
+  .chart-label {
+    font-size: small;
+    font-weight: bold;
+  }
+}
+
 #add-widget-button {
   position: fixed;
   bottom: 3vh;
@@ -162,7 +174,7 @@ header {
   left: 50%;
   top: 50%;
   position: fixed;
-  background-color: yellow;
+  background-color: aliceblue;
   font-size: 20px;
   transform: scale(0);
   transition: 200ms ease-in-out;
@@ -172,6 +184,18 @@ header {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  .exit-button {
+    position: relative;
+    right: 0;
+  }
+
+  button {
+    font: inherit;
+    height: 100px;
+    width: 100px;
+    margin: 10px;
+  }
 }
 
 .modal.active {

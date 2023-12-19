@@ -1,35 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import HitMissLinePlot from './HitMissLinePlot.jsx';
-import FreeMemory from './FreeMemory.jsx';
-import Header from './Header.jsx';
-import Footer from './Footer.jsx';
-import AddWidgetModal from './AddWidgetModal.jsx';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { SET_WIDGETS } from '../dashboardReducer.js';
 
+import Header from './Header.jsx';
+import Footer from './Footer.jsx';
+import AddWidgetModal from './AddWidgetModal.jsx';
+import nameToComponent from '../assets/AvailableGraphs.jsx';
+
 const DashBoard = () => {
-  const [chData, setCHData] = useState([]);
-  // const [widgets, setWidgets] = useState([]);
   const widgets = useSelector((store) => store.dashboard.widgetArray);
   const dispatch = useDispatch();
-
-  //get cache hits ratio
-  const fetchCHData = async () => {
-    try {
-      const res = await fetch('/api/cacheHitsRatio');
-      const newData = await res.json();
-      setCHData([...chData, newData]);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  // every time cache hit data is updated, set timeout is called again
-  useEffect(() => {
-    setTimeout(() => {
-      fetchCHData();
-    }, 1000);
-  }, [chData]);
 
   //fetch user's widgets from user database on load
   const fetchWidgets = async () => {
@@ -38,7 +18,6 @@ const DashBoard = () => {
       const res = await fetch('/users/widgets');
       const widgetArray = await res.json();
       dispatch(SET_WIDGETS(widgetArray));
-      // setWidgets(widgetArray);
     } catch (error) {
       console.log(error);
     }
@@ -47,19 +26,7 @@ const DashBoard = () => {
     fetchWidgets();
   }, []);
 
-  const nameToComponent = {
-    hitmiss: {
-      large: <HitMissLinePlot data={chData} />,
-      medium: <HitMissLinePlot data={chData} width={250} height={250} />,
-      small: <HitMissLinePlot data={chData} width={120} height={120} />,
-    },
-    memory: {
-      large: <FreeMemory></FreeMemory>,
-      medium: <FreeMemory></FreeMemory>,
-      small: <FreeMemory></FreeMemory>,
-    },
-  };
-
+  //map widget list (ex [['large', 'hitmiss']]) to a component
   const widgetDisplay = [];
   widgets.forEach((widget, index) => {
     widgetDisplay.push(

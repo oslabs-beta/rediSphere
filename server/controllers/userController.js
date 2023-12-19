@@ -24,7 +24,8 @@ userController.addWidget = async (req, res, next) => {
   const { newWidget } = req.body;
   try {
     const id = req.cookies.ssid;
-    //new:true because default behavior (new: false) is to return the user document Before it updates
+    //new:true because default behavior (new: false)
+    //is to return the user document Before it updates
     const update = await User.findByIdAndUpdate(
       id,
       { $push: { widgets: [newWidget] } },
