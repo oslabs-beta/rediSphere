@@ -3,16 +3,22 @@ import HitMissLinePlot from './HitMissLinePlot.jsx';
 import FreeMemory from './FreeMemory.jsx';
 import Header from './Header.jsx';
 import Footer from './Footer.jsx';
+import AddWidgetModal from './AddWidgetModal.jsx';
+import { useDispatch, useSelector } from 'react-redux';
+import { SET_WIDGETS } from '../dashboardReducer.js';
 
 const DashBoard = () => {
   const [chData, setCHData] = useState([]);
+  // const [widgets, setWidgets] = useState([]);
+  const widgets = useSelector((store) => store.dashboard.widgetArray);
+  const dispatch = useDispatch();
 
   //get cache hits ratio
   const fetchCHData = async () => {
     try {
       const res = await fetch('/api/cacheHitsRatio');
       const newData = await res.json();
-      return newData;
+      setCHData([...chData, newData]);
     } catch (error) {
       console.log(error);
     }
@@ -21,29 +27,31 @@ const DashBoard = () => {
   // every time cache hit data is updated, set timeout is called again
   useEffect(() => {
     setTimeout(() => {
-      fetchCHData().then((data) => {
-        setCHData((prevData) => [...prevData, data]);
-      });
+      fetchCHData();
     }, 1000);
   }, [chData]);
 
-  // get widget data from saved database later on
-  const widgets = [
-    ['large', 'hitmiss'],
-    ['small', 'memory'],
-    ['medium', 'hitmiss'],
-    ['medium', 'memory'],
-    ['large', 'hitmiss'],
-    ['small', 'hitmiss'],
-    ['small', 'hitmiss'],
-    ['large', 'memory'],
-  ];
+  //fetch user's widgets from user database on load
+  const fetchWidgets = async () => {
+    try {
+      console.log('hello');
+      const res = await fetch('/users/widgets');
+      const widgetArray = await res.json();
+      dispatch(SET_WIDGETS(widgetArray));
+      // setWidgets(widgetArray);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    fetchWidgets();
+  }, []);
 
   const nameToComponent = {
     hitmiss: {
       large: <HitMissLinePlot data={chData} />,
       medium: <HitMissLinePlot data={chData} width={250} height={250} />,
-      small: <HitMissLinePlot data={chData} width={100} height={100} />,
+      small: <HitMissLinePlot data={chData} width={120} height={120} />,
     },
     memory: {
       large: <FreeMemory></FreeMemory>,
@@ -64,19 +72,18 @@ const DashBoard = () => {
   return (
     <div className="home-page">
       <Header />
-      <div className="widget-container">
-        {/* <div className="widget large" id="1">
-          {<HitMissLinePlot data={data}></HitMissLinePlot>}
-        </div>
-        <div className="widget small" id="2">
-          <FreeMemory></FreeMemory>
-        </div>
-        <div className="widget medium" id="3"></div>
-        <div className="widget medium" id="4"></div> */}
-        {widgetDisplay}
-      </div>
+      <div className="widget-container">{widgetDisplay}</div>
 
-      <button id="add-widget-button">+</button>
+      <button
+        id="add-widget-button"
+        onClick={() => {
+          document.getElementById('overlay').classList.add('active');
+          document.getElementById('add-widget').classList.add('active');
+        }}
+      >
+        +
+      </button>
+      <AddWidgetModal />
       <Footer />
     </div>
   );
