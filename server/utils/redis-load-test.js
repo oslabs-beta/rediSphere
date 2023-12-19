@@ -30,11 +30,11 @@ function createConfiguredClient() {
 // 50% set, 50% get
 // keys/values are random hex values
 function runRandomOp(client) {
-  const key = generateRandomKey();
+  const key = generateRandomKey(totalKeys);
 
   if (Math.random() < 0.5) {
     //client.set(key, generateRandomValue());
-    client.setEx(key, 1, generateRandomValue());
+    client.setEx(key, 5, generateRandomValue());
   } else {
     client.get(key, (err, res) => {
       if (err) {
@@ -46,9 +46,13 @@ function runRandomOp(client) {
 }
 
 // Generate random string keys and values
-//const totalKeys = 50;
-function generateRandomKey(totalKeys) {
-  return (randomBytes(10) % totalKeys).toString();
+// # of keys will pull value from createLoadTest default for number of keys
+function generateRandomKey(tK = totalKeys) {
+  let keyBytes = randomBytes(16);
+  const decBytes = parseInt(keyBytes.toString('hex'), 16); //converts bytes to hex, then to decimal (hex is radix 16)
+  const keyNum = decBytes % tK; //constrain to keyspace of size totalKeys
+  keyBytes = Buffer.from(keyNum);
+  return keyBytes;
 }
 
 function generateRandomValue() {
