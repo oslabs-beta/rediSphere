@@ -103,4 +103,6 @@ class RedisClient {
   }
 }
 
+const myConnection = RedisClient.createSe;
+
 module.exports = RedisClient;

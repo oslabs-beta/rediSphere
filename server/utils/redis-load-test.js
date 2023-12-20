@@ -6,6 +6,7 @@ const redisPassword = process.env.REDIS_PASS;
 const socketHost = process.env.HOST;
 const redisPort = process.env.REDIS_PORT;
 //const redisURL = `redis://${redisUser}:${redisPassword}@${socketHost}:${redisPort}`;
+
 //HELPER FUNCTIONS
 
 //Creates a configured client w/error handler
@@ -52,7 +53,7 @@ function createConfiguredClient() {
 
 function runHitOp(client) {
   //const key = [...usedKeys][Math.floor(Math.random() * usedKeys.size)];
-  client.set('hit_key', 'value');
+  client.set('hit_key', generateRandomValue());
   //client.setEx('hit_key', 10, 'value');
   client.get('hit_key', (err, res) => {
     if (err) {
@@ -76,7 +77,7 @@ function generateRandomKey(totalKeys) {
 
 //random value generator
 function generateRandomValue() {
-  return randomBytes(50);
+  return randomBytes(30000);
 }
 
 function setWindows(periods, startTime, timeLimit) {
@@ -93,6 +94,7 @@ function setWindows(periods, startTime, timeLimit) {
   }
 
   return windows;
+  //returns [{start: 1700894, end: 1800894}, {start: ... , end: ...}]
 }
 
 // function getCurrentWindow(windows, now) {
@@ -105,9 +107,9 @@ function setWindows(periods, startTime, timeLimit) {
 module.exports = function createLoadTest({
   totalClients = 5,
   totalOps = 1000,
-  timeLimit = 60,
+  timeLimit = 60, // seconds
   totalKeys = 1000000,
-  targets = 4, // seconds
+  targets = 4,
 }) {
   const clients = [];
 
@@ -133,6 +135,7 @@ module.exports = function createLoadTest({
   const windows = setWindows(targets, startTime, timeLimit);
   console.log(windows);
   let window = 0;
+
   return new Promise((resolve, reject) => {
     const interval = setInterval(() => {
       now = Date.now();
@@ -140,8 +143,11 @@ module.exports = function createLoadTest({
       //const currWindow = getCurrentWindow(windows, startTime, now);
 
       console.log('Current Stage: ', window);
-      const isEven = false; //currWindow % 2 === 0;
+
+      const isEven = window % 2 === 0;
+
       const opFn = isEven ? runMissOp : runHitOp;
+
       clients.forEach((c) => {
         opFn(c, totalKeys);
         //runRandomOp(c);
@@ -153,8 +159,7 @@ module.exports = function createLoadTest({
         clearInterval(interval);
         clients.forEach((c) => {
           try {
-            c.disconnect();
-            console.log('disconnected!');
+            c.disconnect().then(console.log('disconnected!'));
           } catch (err) {
             console.error(err);
           }
@@ -162,6 +167,6 @@ module.exports = function createLoadTest({
         resolve();
       }
       if (windows[window].end < now) window++;
-    }, 500);
+    }, 5);
   });
 };

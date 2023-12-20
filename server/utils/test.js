@@ -4,8 +4,8 @@ const createLoadTest = require('./redis-load-test');
 
 const options = {
   totalClients: 5,
-  totalOps: 100000,
-  timeLimit: 10,
+  totalOps: 1000000,
+  timeLimit: 60,
   targets: 4,
 };
 
