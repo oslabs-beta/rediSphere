@@ -26,6 +26,16 @@ button:hover {
   padding: 50px;
 }
 
+.main-content-title {
+  max-width: 35ch;
+  line-height: 1.25;
+}
+
+.main-content-description {
+  max-width: 55ch;
+  line-height: 1.5;
+}
+
 .login-box,
 .signup-box,
 .redis-connection-box {
