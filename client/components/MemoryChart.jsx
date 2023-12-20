@@ -2,14 +2,15 @@ import * as d3 from 'd3';
 import React, { useRef, useEffect, useState } from 'react';
 
 const GaugeChart = ({
-  width = 550,
-  height = 400,
-  marginTop = 20,
-  marginRight = 20,
-  marginBottom = 20,
-  marginLeft = 20,
+  // width = 550,
+  // height = 400,
+  // marginTop = 20,
+  // marginRight = 20,
+  // marginBottom = 20,
+  // marginLeft = 20,
+  radius = 50,
 }) => {
-  const [data, setData] = useState({ usedMemory: 0, peakUsedMemory: 0 });
+  const [data, setData] = useState({});
 
   //get evicted/expired keys
   const fetchData = async () => {
@@ -33,80 +34,87 @@ const GaugeChart = ({
 
   let percentageUsed = (data.usedMemory / 30) * 100;
   let percentagePeakUsed = (data.peakUsedMemory / 30) * 100;
-  //   const gx = useRef();
-  //   const gy = useRef();
 
-  //create scales for x and y axes
-  // Domain --> abstract index values of the data
-  // Range --> visible pixel range that those indices will map to
-  //   const x = d3
-  //     .scaleUtc()
-  //     .domain([Date.now() - 60 * 1000 * dataTimeRange, Date.now()])
-  //     .range([marginLeft, width - marginRight]);
-  //   const y = d3
-  //     .scaleLinear()
-  //     .domain([0, d3.max(formattedData, (d) => d.totalKeys)])
-  //     .range([height - marginBottom, marginTop]);
-
-  //   const line = d3
-  //     .line()
-  //     .x((d) => x(d.timestamp))
-  //     .y((d) => y(d.expired));
-
-  //   useEffect(() => void d3.select(gx.current).call(d3.axisBottom(x)), [gx, x]);
-  //   useEffect(() => void d3.select(gy.current).call(d3.axisLeft(y)), [gy, y]);
-
-  if (data) {
+  if (!Object.keys(data).length) {
+    return <p>Loading...</p>;
+  } else {
     return (
-      <svg width={width} height={height}>
-        <circle cx={100} cy={100} r={50} fill="none" stroke="#e0e0e0" strokeWidth={10} />
+      <svg className="memory-chart" width={radius * 2.5} height={radius * 2.2}>
+        <defs>
+          <clipPath id={`cut-off-bottom-${radius}`}>
+            <rect
+              transform={`translate(10, 10)`}
+              width={radius * 2 + 20}
+              height={radius + 10}
+            ></rect>
+          </clipPath>
+        </defs>
+
         <circle
-          cx={100}
-          cy={100}
-          r={50}
+          cx={radius + 20}
+          cy={radius + 20}
+          r={radius}
+          fill="none"
+          stroke="#F4F4F4"
+          strokeWidth={20}
+          clipPath={`url(#cut-off-bottom-${radius})`}
+        />
+        <circle
+          cx={radius + 20}
+          cy={radius + 20}
+          r={radius}
+          fill="none"
+          stroke="red"
+          strokeWidth={20}
+          pathLength={1}
+          strokeDasharray={0.5 + percentagePeakUsed / 200}
+          clipPath={`url(#cut-off-bottom-${radius})`}
+        />
+        <circle
+          cx={radius + 20}
+          cy={radius + 20}
+          r={radius}
           fill="none"
           stroke="#3498db"
-          strokeWidth={10}
-          strokeDasharray={100 * Math.PI}
-          strokeDashoffset={100 * Math.PI * (1 - percentageUsed / 100)}
-          strokeLinecap="round"
+          strokeWidth={20}
+          pathLength={1}
+          strokeDasharray={0.5 + percentageUsed / 200}
+          clipPath={`url(#cut-off-bottom-${radius})`}
         />
-        <circle cx={400} cy={100} r={50} fill="none" stroke="#e0e0e0" strokeWidth={10} />
-        <circle
-          cx={400}
-          cy={100}
-          r={50}
-          fill="none"
-          stroke="#3498db"
-          strokeWidth={10}
-          strokeDasharray={100 * Math.PI}
-          strokeDashoffset={100 * Math.PI * (1 - percentagePeakUsed / 100)}
-          strokeLinecap="round"
-        />
-        <text x={100} y={100} textAnchor="middle" dy="0.3em" fontSize="16" fill="#3498db">
-          {`${percentageUsed.toFixed(2)}%`}
+
+        <text
+          x={radius + 20}
+          y={radius * 1.5}
+          textAnchor="middle"
+          dy="0.3em"
+          fontSize={radius / 5}
+          fill="#3498db"
+        >
+          {`Current: ${percentageUsed.toFixed(2)}%`}
         </text>
-        <text x={400} y={100} textAnchor="middle" dy="0.3em" fontSize="16" fill="#e74c3c">
-          {`${percentagePeakUsed.toFixed(2)}% \n(Peak)`}
+        <text
+          x={radius + 20}
+          y={radius * 1.7}
+          textAnchor="middle"
+          dy="0.3em"
+          fontSize={radius / 5}
+          fill="red"
+        >
+          {`Peak: ${percentagePeakUsed.toFixed(2)}% \n`}
         </text>
-        {/* <g ref={gx} transform={`translate(0,${height - marginBottom})`} />
-        <g ref={gy} transform={`translate(${marginLeft},0)`} /> */}
-        {/* <path fill="none" stroke="blue" strokeWidth="1.5" d={line(formattedData)} />
-        <g fill="none" stroke="blue" strokeWidth="1.5">
-          {formattedData.map((d, i) => (
-            <circle key={i} cx={x(d.timestamp)} cy={y(d.expired)} r=".75" />
-          ))}
-        </g>
-        <path fill="none" stroke="red" strokeWidth="1.5" d={line(formattedData)} />
-        <g fill="none" stroke="red" strokeWidth="1.5">
-          {formattedData.map((d, i) => (
-            <circle key={i} cx={x(d.timestamp)} cy={y(d.evicted)} r=".75" />
-          ))}
-        </g> */}
+        <text
+          x={radius + 20}
+          y={radius * 2}
+          textAnchor="middle"
+          dy="0.3em"
+          fontSize={radius / 5 + 4}
+          fontWeight={500}
+          fill="black"
+        >
+          {'Memory Usage'}
+        </text>
       </svg>
     );
-  } else {
-    return <p>Loading...</p>;
   }
 };
 

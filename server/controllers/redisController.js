@@ -7,7 +7,7 @@ const redisController = {};
 redisController.disconnectRedis = async (req, res, next) => {
   try {
     req.redisClient.disconnect();
-    console.log('Redis disconnected!');
+    // console.log('Redis disconnected!');
     return next();
   } catch (err) {
     return next({
@@ -31,8 +31,8 @@ redisController.connectUserRedis = async (req, res, next) => {
         port,
       },
     });
-    redisClient.connect();
-    console.log(`Connected to Redis Server: ${host} on port ${port}`);
+    await redisClient.connect();
+    // console.log(`Connected to Redis Server: ${host} on port ${port}`);
     req.redisClient = redisClient;
     return next();
   } catch (err) {
@@ -190,14 +190,14 @@ redisController.getMemory = async (req, res, next) => {
     peakUsedMemory = Number(
       peakUsedMemory.slice(peakUsedMemory.indexOf(':') + 1, peakUsedMemory.length - 1),
     );
-    console.log(stats);
+    // console.log(stats);
     // totalMemory = Number(totalMemory.slice(totalMemory.indexOf(':') + 1, totalMemory.length - 1));
     res.locals.memory = {
       usedMemory: usedMemory,
       peakUsedMemory: peakUsedMemory,
       // totalMemory: totalMemory,
     };
-    console.log(res.locals.memory);
+    // console.log(res.locals.memory);
     return next();
   } catch (err) {
     return next({

@@ -1,6 +1,9 @@
 import React from 'react';
 import HitMissLinePlot from '../components/HitMissLinePlot.jsx';
-import FreeMemory from '../components/FreeMemory.jsx';
+// import FreeMemory from '../components/FreeMemory.jsx';
+import EvictedExpired from '../components/EvictedExpiredLinePlot.jsx';
+import LatencyChart from '../components/LatencyChart.jsx';
+import MemoryChart from '../components/MemoryChart.jsx';
 
 const nameToComponent = {
   hitmiss: {
@@ -8,9 +11,17 @@ const nameToComponent = {
     medium: <HitMissLinePlot width={250} height={250} />,
   },
   memory: {
-    large: <FreeMemory></FreeMemory>,
-    medium: <FreeMemory></FreeMemory>,
-    small: <FreeMemory></FreeMemory>,
+    large: <MemoryChart radius={150}></MemoryChart>,
+    medium: <MemoryChart radius={100}></MemoryChart>,
+    small: <MemoryChart radius={50}></MemoryChart>,
+  },
+  evicted: {
+    large: <EvictedExpired></EvictedExpired>,
+    medium: <EvictedExpired width={250} height={250}></EvictedExpired>,
+  },
+  latency: {
+    large: <LatencyChart></LatencyChart>,
+    medium: <LatencyChart width={250} height={250}></LatencyChart>,
   },
 };
 

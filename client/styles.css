@@ -177,7 +177,9 @@ svg {
     font-size: small;
   }
 }
-
+.memory-chart {
+  margin: 0;
+}
 #add-widget-button {
   position: fixed;
   bottom: 3vh;
