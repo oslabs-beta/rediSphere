@@ -46,19 +46,6 @@ redisController.connectUserRedis = async (req, res, next) => {
 
 //efficiency of cache usage metric
 redisController.getCacheHitsRatio = async (req, res, next) => {
-<<<<<<< HEAD
-  //store Redis client from middleware
-  const redisClient = req.redisClient;
-  //connect to local redis instannce
-  // await redisClient.connect();
-  // //set one key to get *some* data to see the performance on
-  // await redisClient.set('test', 'hello');
-  //response is a giant array of comma and newline separated values, with sections delinated by '# <SectionHeader>',
-  const stats = await redisClient.info();
-
-  //separate string into individual metrics and store in array
-  const metrics = stats.split('\r\n');
-=======
   try {
     //store Redis client from middleware
     const redisClient = req.redisClient;
@@ -70,7 +57,6 @@ redisController.getCacheHitsRatio = async (req, res, next) => {
     const stats = await redisClient.info();
     //separate string into individual metrics and store in array
     const metrics = stats.split('\r\n');
->>>>>>> 84f36eab73d69ec352ccda2eacb2ff05ff84b66f
 
     let cacheHits = metrics.find((str) => str.startsWith('keyspace_hits'));
     let cacheMisses = metrics.find((str) => str.startsWith('keyspace_misses'));
@@ -80,17 +66,9 @@ redisController.getCacheHitsRatio = async (req, res, next) => {
     cacheMisses = Number(cacheMisses.slice(cacheMisses.indexOf(':') + 1));
     timestamp = Number(timestamp.slice(timestamp.indexOf(':') + 1));
 
-<<<<<<< HEAD
-  //timestamp = Number(timestamp.slice(timestamp.indexOf(':') + 1));
-  console.log('hits', cacheHits);
-  console.log('misses', cacheMisses);
-  console.log('timestamp in microseconds since unix epoch', timestamp);
-  console.log('timestamp in microseconds since unix epoch', timestamp);
-=======
     // console.log('hits', cacheHits);
     // console.log('misses', cacheMisses);
     // console.log('timestamp in microseconds since unix epoch', timestamp);
->>>>>>> 84f36eab73d69ec352ccda2eacb2ff05ff84b66f
 
     //if ratio lower than -0.8,  then a significant amount of the requested keys are evicted, expired, or do not exist at all
 
