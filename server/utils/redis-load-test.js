@@ -29,43 +29,85 @@ function createConfiguredClient() {
 //runs a random operation:
 // 50% set, 50% get
 // keys/values are random hex values
-function runRandomOp(client) {
-  const key = generateRandomKey(totalKeys);
+// function runRandomOp(client) {
+//   const key = generateRandomKey(totalKeys);
+//   console.log(key);
 
-  if (Math.random() < 0.5) {
-    //client.set(key, generateRandomValue());
-    client.setEx(key, 5, generateRandomValue());
-  } else {
-    client.get(key, (err, res) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
-    });
-  }
+//   if (Math.random() < 0.5) {
+//     //client.set(key, generateRandomValue());
+//     let val = generateRandomValue();
+//     //console.log(val);
+//     client.set(key, val);
+//   } else {
+//     client.get(key, (err, res) => {
+//       if (err) {
+//         console.error(err);
+//         return;
+//       }
+//     });
+//   }
+// }
+
+//const usedKeys = new Set();
+
+function runHitOp(client) {
+  //const key = [...usedKeys][Math.floor(Math.random() * usedKeys.size)];
+  client.set('hit_key', 'value');
+  //client.setEx('hit_key', 10, 'value');
+  client.get('hit_key', (err, res) => {
+    if (err) {
+      console.error(err);
+      return;
+    } else {
+      console.log('Value: ', res);
+    }
+  });
 }
 
-// Generate random string keys and values
-// # of keys will pull value from createLoadTest default for number of keys
-function generateRandomKey(tK = totalKeys) {
-  let keyBytes = randomBytes(16);
-  const decBytes = parseInt(keyBytes.toString('hex'), 16); //converts bytes to hex, then to decimal (hex is radix 16)
-  const keyNum = decBytes % tK; //constrain to keyspace of size totalKeys
-  keyBytes = Buffer.from(keyNum);
-  return keyBytes;
+//guaranteed cache miss -- never set a key other than 'hit_key'
+function runMissOp(client, totalKeys) {
+  client.get(generateRandomKey(1000000));
 }
 
+//random key generator
+function generateRandomKey(totalKeys) {
+  return Math.floor(Math.random() * totalKeys).toString();
+}
+
+//random value generator
 function generateRandomValue() {
   return randomBytes(50);
 }
 
-// redis-load-test.js
+function setWindows(periods, startTime, timeLimit) {
+  const windowSize = Math.floor((timeLimit * 1000) / periods);
+
+  const windows = [];
+  let start = startTime;
+  let end = start + windowSize;
+
+  for (let i = 0; i < periods; i++) {
+    windows.push({ start, end });
+    start = end + 1;
+    end += windowSize;
+  }
+
+  return windows;
+}
+
+// function getCurrentWindow(windows, now) {
+//   for (let i = 0; i < windows.length; i++) {
+//     const window = windows[i];
+//     if (now >= window.start && now <= window.end) return i;
+//   }
+// }
 
 module.exports = function createLoadTest({
-  totalClients = 1,
+  totalClients = 5,
   totalOps = 1000,
   timeLimit = 60,
-  totalKeys = 50, // seconds
+  totalKeys = 1000000,
+  targets = 4, // seconds
 }) {
   const clients = [];
 
@@ -76,27 +118,50 @@ module.exports = function createLoadTest({
 
     client.on('ready', () => {
       clients.push(client);
+      //console.log(clients);
     });
     client.on('error', (err) => {
       console.error(err);
     });
   }
+  //console.log(clients);
 
   let opsCount = 0;
 
+  const startTime = Date.now();
   const endTime = Date.now() + timeLimit * 1000;
-
+  const windows = setWindows(targets, startTime, timeLimit);
+  console.log(windows);
+  let window = 0;
   return new Promise((resolve, reject) => {
     const interval = setInterval(() => {
-      clients.forEach((client) => {
-        runRandomOp(client);
+      now = Date.now();
+
+      //const currWindow = getCurrentWindow(windows, startTime, now);
+
+      console.log('Current Stage: ', window);
+      const isEven = false; //currWindow % 2 === 0;
+      const opFn = isEven ? runMissOp : runHitOp;
+      clients.forEach((c) => {
+        opFn(c, totalKeys);
+        //runRandomOp(c);
         opsCount++;
       });
-      console.log(`Simulating ${totalClients} clients`);
+
+      //console.log(`Simulating ${totalClients} clients`);
       if (opsCount >= totalOps || Date.now() > endTime) {
         clearInterval(interval);
+        clients.forEach((c) => {
+          try {
+            c.disconnect();
+            console.log('disconnected!');
+          } catch (err) {
+            console.error(err);
+          }
+        });
         resolve();
       }
-    }, 100);
+      if (windows[window].end < now) window++;
+    }, 500);
   });
 };

@@ -66,7 +66,7 @@ redisController.getCacheHitsRatio = async (req, res, next) => {
   cacheMisses = Number(cacheMisses.slice(cacheMisses.indexOf(':') + 1));
   timestamp = Number(timestamp.slice(timestamp.indexOf(':') + 1));
 
-  timestamp = Number(timestamp.slice(timestamp.indexOf(':') + 1));
+  //timestamp = Number(timestamp.slice(timestamp.indexOf(':') + 1));
   console.log('hits', cacheHits);
   console.log('misses', cacheMisses);
   console.log('timestamp in microseconds since unix epoch', timestamp);
