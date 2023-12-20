@@ -76,8 +76,10 @@ function generateRandomKey(totalKeys) {
 }
 
 //random value generator
-function generateRandomValue() {
-  return randomBytes(30000);
+function generateRandomValue(sizeInBytes = 50) {
+  //MB = 1000 KB
+  //KB = 1000 Bytes
+  return randomBytes(sizeInBytes);
 }
 
 function setWindows(periods, startTime, timeLimit) {
@@ -95,6 +97,21 @@ function setWindows(periods, startTime, timeLimit) {
 
   return windows;
   //returns [{start: 1700894, end: 1800894}, {start: ... , end: ...}]
+}
+
+function runCacheFill(client) {
+  //while memory used < 30MB
+  //set more keys
+
+  for (let i = 1; i < 50; i++) {
+    client.setEx(`${i}`, 30, generateRandomValue(1000000));
+  }
+}
+
+function getLeastRecentKey(client) {
+  for (let i = 0; i < 26; i++) {
+    client.get(`${i}`, generateRandomValue());
+  }
 }
 
 // function getCurrentWindow(windows, now) {
@@ -146,27 +163,32 @@ module.exports = function createLoadTest({
 
       const isEven = window % 2 === 0;
 
-      const opFn = isEven ? runMissOp : runHitOp;
+      const opFn = isEven ? runHitOp : runHitOp;
 
       clients.forEach((c) => {
-        opFn(c, totalKeys);
+        // for (let i = 0; i < 10; i++) {
+        //   getLeastRecentKey(c);
+        // }
+        //c.set('103', generateRandomValue());
+        runCacheFill(c); //set keys is async --> if it isn't complete, still goes to check the totalOps and endTime
+        //opFn(c, totalKeys);
         //runRandomOp(c);
         opsCount++;
       });
 
       //console.log(`Simulating ${totalClients} clients`);
-      if (opsCount >= totalOps || Date.now() > endTime) {
-        clearInterval(interval);
-        clients.forEach((c) => {
-          try {
-            c.disconnect().then(console.log('disconnected!'));
-          } catch (err) {
-            console.error(err);
-          }
-        });
-        resolve();
-      }
+      // if (opsCount >= totalOps || Date.now() > endTime) {
+      //   clearInterval(interval);
+      //   clients.forEach((c) => {
+      //     try {
+      //       c.disconnect().then(console.log('disconnected!'));
+      //     } catch (err) {
+      //       console.error(err);
+      //     }
+      //   });
+      //   resolve();
+      // }
       if (windows[window].end < now) window++;
-    }, 5);
+    }, 2000);
   });
 };
