@@ -93,15 +93,8 @@ redisController.getCacheHitsRatio = async (req, res, next) => {
 //A positive metric value shows that your expired data is being cleaned up properly
 redisController.getEvictedExpired = async (req, res, next) => {
   try {
-    //store Redis client from middleware
     const redisClient = req.redisClient;
-    //connect to local redis instannce
-    // await redisClient.connect();
-    // //set one key to get *some* data to see the performance on
-    // await redisClient.set('test', 'hello');
-    //response is a giant array of comma and newline separated values, with sections delinated by '# <SectionHeader>',
     const stats = await redisClient.info();
-    //separate string into individual metrics and store in array
     const metrics = stats.split('\r\n');
     // console.log(metrics);
     let totalKeys = metrics.find((str) => str.startsWith('db'));
