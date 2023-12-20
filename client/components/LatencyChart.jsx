@@ -48,13 +48,13 @@ const Chart = ({
 
   const gx = useRef();
   const gy = useRef();
-
+  const gyl = useRef();
   //create scales for x and y axes
   // Domain --> abstract index values of the data
   // Range --> visible pixel range that those indices will map to
   const x = d3
     .scaleUtc()
-    .domain([Date.now() - 60 * 1000 * dataTimeRange, Date.now()])
+    .domain([Date.now() - 60 * 1000 * 2, Date.now()])
     .range([marginLeft, width - marginRight]);
   const y = d3
     .scaleLinear()
@@ -62,48 +62,51 @@ const Chart = ({
     .range([height - marginBottom, marginTop]);
   const yLine = d3
     .scaleLinear()
-    .domain([0, d3.max(formattedData, (d) => d.commandsProcessed)])
+    .domain(d3.extent(formattedData, (d) => d.totalGet))
     .range([height - marginBottom, marginTop]);
 
   const line = d3
     .line()
     .x((d) => x(d.timestamp))
-    .y((d) => yLine(d.commandsProcessed));
+    .y((d) => yLine(d.totalGet));
 
   useEffect(() => void d3.select(gx.current).call(d3.axisBottom(x)), [gx, x]);
   useEffect(() => void d3.select(gy.current).call(d3.axisLeft(y)), [gy, y]);
-  //   useEffect(() => void d3.select(gy.current).call(d3.axisLeft(yLine)), [gy, yLine]);
+  useEffect(() => void d3.select(gyl.current).call(d3.axisRight(yLine)), [gyl, yLine]);
 
-  function getRandomColor() {
-    const letters = '0123456789ABCDEF';
-    let color = '#';
-    for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-  }
+  //   function getRandomColor() {
+  //     const letters = '0123456789ABCDEF';
+  //     let color = '#';
+  //     for (let i = 0; i < 6; i++) {
+  //       color += letters[Math.floor(Math.random() * 16)];
+  //     }
+  //     return color;
+  //   }
 
   if (data.length) {
     return (
       <svg width={width} height={height}>
         <g ref={gx} transform={`translate(0,${height - marginBottom})`} />
         <g ref={gy} transform={`translate(${marginLeft},0)`} />
-        <path fill="none" stroke="blue" strokeWidth="1.5" d={line(formattedData)} />
-        <g fill="none" stroke="blue" strokeWidth="1.5">
+        <g ref={gyl} transform={`translate(${width - marginRight},0)`} />
+        <path fill="none" stroke="black" strokeWidth="1.5" d={line(formattedData)} />
+        <g fill="none" stroke="black" strokeWidth="1.5">
           {formattedData.map((d, i) => (
-            <circle key={i} cx={x(d.timestamp)} cy={yLine(d.commandsProcessed)} r=".75" />
+            <circle key={i} cx={x(d.timestamp)} cy={yLine(d.totalGet)} r=".75" />
           ))}
         </g>
         <g>
           {formattedData.map((d, i) => (
             <rect
-              fill={getRandomColor()}
+              //   fill={getRandomColor()}
+              fill="steelblue"
+              fillOpacity={0.5}
               key={i}
               x={x(d.timestamp)}
               y={y(d.avgGetCacheTime)}
-              width={(width - marginLeft - marginRight) / formattedData.length}
+              //   width={(width - marginLeft - marginRight) / formattedData.length}
+              width={'5px'}
               height={height - marginBottom - y(d.avgGetCacheTime)}
-              padding="10px"
             />
           ))}
         </g>

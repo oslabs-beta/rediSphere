@@ -147,10 +147,14 @@ redisController.getResponseTimes = async (req, res, next) => {
     const cmdstats = await redisClient.info('commandstats');
     const cmdmetrics = cmdstats.split('\r\n');
     let avgGetCacheTime = cmdmetrics.find((str) => str.startsWith('cmdstat_get'));
+    let totalGet = avgGetCacheTime;
+    // console.log('*******', avgGetCacheTime);
     // time is in microseconds
     avgGetCacheTime = Number(avgGetCacheTime.slice(avgGetCacheTime.indexOf('usec_per_call=') + 14));
+    totalGet = Number(totalGet.slice(totalGet.indexOf('calls=') + 6, totalGet.indexOf(',')));
     res.locals.latency = {
       commandsProcessed: commandsProcessed,
+      totalGet: totalGet,
       avgGetCacheTime: avgGetCacheTime,
       timestamp: timestamp,
     };
@@ -179,12 +183,21 @@ redisController.getMemory = async (req, res, next) => {
     let usedMemory = metrics.find((str) => str.startsWith('used_memory_human'));
     //max amount of memory Redis has consumed.
     let peakUsedMemory = metrics.find((str) => str.startsWith('used_memory_peak_human'));
+    //total memory
+    let totalMemory = metrics.find((str) => str.startsWith('total_system_memory_human'));
     //the number is in MB
     usedMemory = Number(usedMemory.slice(usedMemory.indexOf(':') + 1, usedMemory.length - 1));
     peakUsedMemory = Number(
       peakUsedMemory.slice(peakUsedMemory.indexOf(':') + 1, peakUsedMemory.length - 1),
     );
-    res.locals.memory = { usedMemory: usedMemory, peakUsedMemory: peakUsedMemory };
+    console.log(stats);
+    // totalMemory = Number(totalMemory.slice(totalMemory.indexOf(':') + 1, totalMemory.length - 1));
+    res.locals.memory = {
+      usedMemory: usedMemory,
+      peakUsedMemory: peakUsedMemory,
+      // totalMemory: totalMemory,
+    };
+    console.log(res.locals.memory);
     return next();
   } catch (err) {
     return next({

@@ -1,7 +1,7 @@
 import * as d3 from 'd3';
 import React, { useRef, useEffect, useState } from 'react';
 
-const PieChart = ({
+const GaugeChart = ({
   width = 550,
   height = 400,
   marginTop = 20,
@@ -9,7 +9,7 @@ const PieChart = ({
   marginBottom = 20,
   marginLeft = 20,
 }) => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState({ usedMemory: 0, peakUsedMemory: 0 });
 
   //get evicted/expired keys
   const fetchData = async () => {
@@ -26,54 +26,71 @@ const PieChart = ({
   useEffect(() => {
     setTimeout(() => {
       fetchData().then((data) => {
-        setData((prevData) => [...prevData, data]);
+        setData(() => data);
       });
     }, 1000);
   }, [data]);
-  //take timestamp and overwrite with JS time instaed of server's native epoch time which is in microseconds
-  //divide by 1000 to go from micro seconds to milli seconds
-  let formattedData = data.map((d) => {
-    return {
-      ...d,
-      timestamp: new Date(d.timestamp / 1000),
-    };
-  });
 
-  //setting to 2 minutes
-  const dataTimeRange = 2;
-
-  formattedData = formattedData.filter((d) => {
-    return d.timestamp > Date.now() - 60 * 1000 * dataTimeRange;
-  });
-
-  const gx = useRef();
-  const gy = useRef();
+  let percentageUsed = (data.usedMemory / 30) * 100;
+  let percentagePeakUsed = (data.peakUsedMemory / 30) * 100;
+  //   const gx = useRef();
+  //   const gy = useRef();
 
   //create scales for x and y axes
   // Domain --> abstract index values of the data
   // Range --> visible pixel range that those indices will map to
-  const x = d3
-    .scaleUtc()
-    .domain([Date.now() - 60 * 1000 * dataTimeRange, Date.now()])
-    .range([marginLeft, width - marginRight]);
-  const y = d3
-    .scaleLinear()
-    .domain([0, d3.max(formattedData, (d) => d.totalKeys)])
-    .range([height - marginBottom, marginTop]);
+  //   const x = d3
+  //     .scaleUtc()
+  //     .domain([Date.now() - 60 * 1000 * dataTimeRange, Date.now()])
+  //     .range([marginLeft, width - marginRight]);
+  //   const y = d3
+  //     .scaleLinear()
+  //     .domain([0, d3.max(formattedData, (d) => d.totalKeys)])
+  //     .range([height - marginBottom, marginTop]);
 
   //   const line = d3
   //     .line()
   //     .x((d) => x(d.timestamp))
   //     .y((d) => y(d.expired));
 
-  useEffect(() => void d3.select(gx.current).call(d3.axisBottom(x)), [gx, x]);
-  useEffect(() => void d3.select(gy.current).call(d3.axisLeft(y)), [gy, y]);
+  //   useEffect(() => void d3.select(gx.current).call(d3.axisBottom(x)), [gx, x]);
+  //   useEffect(() => void d3.select(gy.current).call(d3.axisLeft(y)), [gy, y]);
 
-  if (data.length) {
+  if (data) {
     return (
       <svg width={width} height={height}>
-        <g ref={gx} transform={`translate(0,${height - marginBottom})`} />
-        <g ref={gy} transform={`translate(${marginLeft},0)`} />
+        <circle cx={100} cy={100} r={50} fill="none" stroke="#e0e0e0" strokeWidth={10} />
+        <circle
+          cx={100}
+          cy={100}
+          r={50}
+          fill="none"
+          stroke="#3498db"
+          strokeWidth={10}
+          strokeDasharray={100 * Math.PI}
+          strokeDashoffset={100 * Math.PI * (1 - percentageUsed / 100)}
+          strokeLinecap="round"
+        />
+        <circle cx={400} cy={100} r={50} fill="none" stroke="#e0e0e0" strokeWidth={10} />
+        <circle
+          cx={400}
+          cy={100}
+          r={50}
+          fill="none"
+          stroke="#3498db"
+          strokeWidth={10}
+          strokeDasharray={100 * Math.PI}
+          strokeDashoffset={100 * Math.PI * (1 - percentagePeakUsed / 100)}
+          strokeLinecap="round"
+        />
+        <text x={100} y={100} textAnchor="middle" dy="0.3em" fontSize="16" fill="#3498db">
+          {`${percentageUsed.toFixed(2)}%`}
+        </text>
+        <text x={400} y={100} textAnchor="middle" dy="0.3em" fontSize="16" fill="#e74c3c">
+          {`${percentagePeakUsed.toFixed(2)}% \n(Peak)`}
+        </text>
+        {/* <g ref={gx} transform={`translate(0,${height - marginBottom})`} />
+        <g ref={gy} transform={`translate(${marginLeft},0)`} /> */}
         {/* <path fill="none" stroke="blue" strokeWidth="1.5" d={line(formattedData)} />
         <g fill="none" stroke="blue" strokeWidth="1.5">
           {formattedData.map((d, i) => (
@@ -93,4 +110,4 @@ const PieChart = ({
   }
 };
 
-export default PieChart;
+export default GaugeChart;
