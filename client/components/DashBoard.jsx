@@ -6,6 +6,9 @@ import Header from './Header.jsx';
 import Footer from './Footer.jsx';
 import AddWidgetModal from './AddWidgetModal.jsx';
 import nameToComponent from '../assets/AvailableGraphs.jsx';
+import EvictedExpired from './EvictedExipredLinePlot.jsx';
+import LatencyChart from './LatencyChart.jsx';
+import MemoryChart from './MemoryChart.jsx';
 
 const DashBoard = () => {
   const widgets = useSelector((store) => store.dashboard.widgetArray);
