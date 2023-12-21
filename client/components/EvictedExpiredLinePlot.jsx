@@ -11,29 +11,37 @@ const LinePlot = ({
 }) => {
   const [data, setData] = useState([]);
 
-  //get evicted/expired keys
+  //get evictedExpired data
   const fetchData = async () => {
     try {
       const res = await fetch('/api/evictedExpired');
       const newData = await res.json();
-      return newData;
+      setData([...data, newData]);
     } catch (error) {
       console.log(error);
     }
   };
 
-  //everytime data is updated, set timeout is called again
+  // every data is updated, set timeout is called again, but only *after* data has completed
   useEffect(() => {
     setTimeout(() => {
-      fetchData().then((data) => {
-        setData((prevData) => [...prevData, data]);
-      });
+      fetchData();
     }, 1000);
   }, [data]);
 
   //take timestamp and overwrite with JS time instaed of server's native epoch time which is in microseconds
   //divide by 1000 to go from micro seconds to milli seconds
-  let formattedData = data.map((d) => {
+  let formattedData = data.flatMap((d) => {
+    //after mapping, it "flattens" every element--> empty arrays just get removed, effectively filtering
+    if (d.evicted === null || d.evicted === undefined) {
+      // Filter out data point if null, or undefined
+      console.log('datapoint filtered (evicted): ', d);
+      return [];
+    }
+    if (d.expired === null || d.expired === undefined) {
+      console.log('datapoint filtered (expired)', d);
+      return [];
+    }
     return {
       ...d,
       timestamp: new Date(d.timestamp / 1000),
@@ -57,39 +65,71 @@ const LinePlot = ({
     .scaleUtc()
     .domain([Date.now() - 60 * 1000 * dataTimeRange, Date.now()])
     .range([marginLeft, width - marginRight]);
+
+  //set the top of the y-axis to the max of
+  //either evicted or expired total, or to just 1 if both counts are 0
+  const yMax =
+    Math.max(
+      d3.max(formattedData, (d) => d.expired),
+      d3.max(formattedData, (d) => d.evicted),
+    ) * 1.25; //and scale to 1.25 so that the max val isn't the top of the y-axis
+
   const y = d3
     .scaleLinear()
-    .domain([0, d3.max(formattedData, (d) => d.totalKeys)])
+    .domain([0, yMax || 1])
     .range([height - marginBottom, marginTop]);
+
+  //map formattedData to expiredData w/generic timestamp value keys
+  const expiredData = formattedData.map((d) => ({
+    timestamp: d.timestamp,
+    val: d.expired,
+  }));
+
+  //map formattedData to expiredData w/generic timestamp value keys
+  const evictedData = formattedData.map((d) => ({
+    timestamp: d.timestamp,
+    val: d.evicted,
+  }));
+
+  //TODO
+  //refactor for modularity
+  //if we passed in *all* the data that could be used, and a timestamp,
+  //a generic mapping function could work to set any key on the data object in the array to the "value"
+  /** data =
+   * [
+   *  {
+   *   cacheHits : number,
+   *   cacheMisses : number,
+   *   evictions : number,
+   *   expirations : number,
+   *   memoryMax: number,
+   *   memoryCurrent: number,
+   *   totalKeys: number
+   *   timestamp : number
+   *  },
+   *  {..}, {..}, ...
+   * ]
+   * */
+  // //and then use:
+  // function genericDataMap(dataArray, xKey, yKey) {
+  //   return dataArray.map((d) => ({
+  //     timestamp: d[xKey],
+  //     val: d[yKey],
+  //   }));
+  // }
+
+  // const evictedData = genericDataMap(formattedData, timestamp, evicted);
+  // const expiredData = genericDataMap(formattedData, timestamp, expired);
 
   const line = d3
     .line()
     .x((d) => x(d.timestamp))
-    .y((d) => y(d.expired));
+    .y((d) => y(d.val));
 
   useEffect(() => void d3.select(gx.current).call(d3.axisBottom(x)), [gx, x]);
   useEffect(() => void d3.select(gy.current).call(d3.axisLeft(y)), [gy, y]);
 
   if (data.length) {
-    // console.log(formattedData);
-    const breakDownData = (key) => {
-      const array = [];
-      formattedData.forEach((el) => {
-        const obj = {};
-        obj[key] = el[key];
-        obj.timestamp = el.timestamp;
-        array.push(obj);
-      });
-      return array;
-    };
-    //something weird going on with evicted Line console errors,
-    //commented path out below
-    const evictedLine = breakDownData('evicted');
-    const expiredLine = breakDownData('expired');
-
-    // console.log('evicted', evictedLine);
-    // console.log('expired', expiredLine);
-
     return (
       <svg width={width} height={height}>
         <g ref={gx} transform={`translate(0,${height - marginBottom})`} />
@@ -134,14 +174,14 @@ const LinePlot = ({
         >
           {'no. evicted'}
         </text>
-        <path fill="none" stroke="blue" strokeWidth="1.5" d={line(expiredLine)} />
+        <path fill="none" stroke="blue" strokeWidth="1.5" d={line(expiredData)} />
         <g fill="none" stroke="blue" strokeWidth="1.5">
           {formattedData.map((d, i) => (
             <circle key={i} cx={x(d.timestamp)} cy={y(d.expired)} r=".75" />
           ))}
         </g>
 
-        {/* <path fill="none" stroke="red" strokeWidth="1.5" d={line(evictedLine)} /> */}
+        <path fill="none" stroke="red" strokeWidth="1.5" d={line(evictedData)} />
         <g fill="none" stroke="red" strokeWidth="1.5">
           {formattedData.map((d, i) => (
             <circle key={i} cx={x(d.timestamp)} cy={y(d.evicted)} r=".75" />
