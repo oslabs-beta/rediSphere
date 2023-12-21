@@ -100,6 +100,7 @@ const LinePlot = ({
       return missArray;
     };
     const misses = getMissRatio();
+    // console.log(misses);
 
     return (
       <svg width={width} height={height}>

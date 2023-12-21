@@ -72,6 +72,24 @@ const LinePlot = ({
 
   if (data.length) {
     // console.log(formattedData);
+    const breakDownData = (key) => {
+      const array = [];
+      formattedData.forEach((el) => {
+        const obj = {};
+        obj[key] = el[key];
+        obj.timestamp = el.timestamp;
+        array.push(obj);
+      });
+      return array;
+    };
+    //something weird going on with evicted Line console errors,
+    //commented path out below
+    const evictedLine = breakDownData('evicted');
+    const expiredLine = breakDownData('expired');
+
+    // console.log('evicted', evictedLine);
+    // console.log('expired', expiredLine);
+
     return (
       <svg width={width} height={height}>
         <g ref={gx} transform={`translate(0,${height - marginBottom})`} />
@@ -79,7 +97,7 @@ const LinePlot = ({
           className="chart-label"
           transform={`translate(-15,${(height - marginBottom) / 2 + 75}) rotate(-90)`}
         >
-          {'Eviction/Expiration Rate'}
+          {'No. Eviction/Expiration'}
         </text>
         <g ref={gy} transform={`translate(${marginLeft},0)`} />
         <text
@@ -100,7 +118,7 @@ const LinePlot = ({
             height - marginBottom - 65
           })`}
         >
-          {'expiration rate'}
+          {'no. expired'}
         </text>
         <circle
           cx={(width - marginRight) * 0.75}
@@ -114,18 +132,19 @@ const LinePlot = ({
             height - marginBottom - 45
           })`}
         >
-          {'eviction rate'}
+          {'no. evicted'}
         </text>
-        <path fill="none" stroke="blue" strokeWidth="1.5" d={line(formattedData)} />
+        <path fill="none" stroke="blue" strokeWidth="1.5" d={line(expiredLine)} />
         <g fill="none" stroke="blue" strokeWidth="1.5">
           {formattedData.map((d, i) => (
-            <circle key={i} cx={x(d.timestamp)} cy={y(d.expired / d.totalKeys)} r=".75" />
+            <circle key={i} cx={x(d.timestamp)} cy={y(d.expired)} r=".75" />
           ))}
         </g>
-        <path fill="none" stroke="red" strokeWidth="1.5" d={line(formattedData)} />
+
+        {/* <path fill="none" stroke="red" strokeWidth="1.5" d={line(evictedLine)} /> */}
         <g fill="none" stroke="red" strokeWidth="1.5">
           {formattedData.map((d, i) => (
-            <circle key={i} cx={x(d.timestamp)} cy={y(d.evicted / d.totalKeys)} r=".75" />
+            <circle key={i} cx={x(d.timestamp)} cy={y(d.evicted)} r=".75" />
           ))}
         </g>
       </svg>

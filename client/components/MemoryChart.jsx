@@ -1,15 +1,6 @@
-import * as d3 from 'd3';
 import React, { useRef, useEffect, useState } from 'react';
 
-const GaugeChart = ({
-  // width = 550,
-  // height = 400,
-  // marginTop = 20,
-  // marginRight = 20,
-  // marginBottom = 20,
-  // marginLeft = 20,
-  radius = 50,
-}) => {
+const GaugeChart = ({ radius = 50 }) => {
   const [data, setData] = useState({});
 
   //get evicted/expired keys
@@ -32,12 +23,11 @@ const GaugeChart = ({
     }, 1000);
   }, [data]);
 
-  let percentageUsed = (data.usedMemory / 30) * 100;
-  let percentagePeakUsed = (data.peakUsedMemory / 30) * 100;
-
   if (!Object.keys(data).length) {
     return <p>Loading...</p>;
   } else {
+    const percentageUsed = (data.usedMemory / 30) * 100;
+    const percentagePeakUsed = (data.peakUsedMemory / 30) * 100;
     return (
       <svg className="memory-chart" width={radius * 2.5} height={radius * 2.2}>
         <defs>

@@ -200,7 +200,7 @@ svg {
 
 .modal {
   z-index: 2;
-  width: 50vw;
+  width: 60vw;
   height: 80vh;
   left: 50%;
   top: 50%;
@@ -216,15 +216,32 @@ svg {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
 
+.widget-button-container {
+  padding: 20px;
+  overflow-y: auto;
   button {
     font: inherit;
-    height: 100px;
-    width: 100px;
     margin: 10px;
     background-color: white;
     border: none;
     border-radius: 20px;
+    padding: 15px;
+    .large {
+      height: 225px;
+      width: 300px;
+    }
+
+    .medium {
+      height: 200px;
+      width: 200px;
+    }
+
+    .small {
+      height: 100px;
+      width: 100px;
+    }
   }
   button:hover {
     background-color: gainsboro;
@@ -234,6 +251,23 @@ svg {
 .modal.active {
   transform: translate(-50%, -50%) scale(1);
   margin: 0;
+}
+
+#x-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  border-radius: 30px;
+  background-color: red;
+  color: white;
+  border: none;
+  opacity: 0.2;
+}
+#x-button:hover {
+  opacity: 0.5;
 }
 
 .overlay {
@@ -250,23 +284,6 @@ svg {
 
 .overlay.active {
   display: flex;
-}
-
-#x-button {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 30px;
-  height: 30px;
-  text-align: center;
-  border-radius: 30px;
-  background-color: pink;
-  color: white;
-  border: none;
-  opacity: 0.8;
-}
-#x-button:hover {
-  opacity: 1;
 }
 
 footer {

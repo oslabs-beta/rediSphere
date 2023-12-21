@@ -76,7 +76,7 @@ redisController.getCacheHitsRatio = async (req, res, next) => {
       cacheHitRatio: cacheHits + cacheMisses === 0 ? 0 : cacheHits / (cacheHits + cacheMisses),
       timestamp: timestamp,
     };
-    console.log(res.locals.stats);
+    // console.log(res.locals.stats);
   } catch (err) {
     return next({
       log: `redisController.getCacheHitsRatio error: ${err}`,
@@ -115,7 +115,7 @@ redisController.getEvictedExpired = async (req, res, next) => {
       expired: expired,
       timestamp: timestamp,
     };
-    console.log(res.locals.evictedExpired);
+    // console.log(res.locals.evictedExpired);
     return next();
   } catch (err) {
     return next({
@@ -153,7 +153,7 @@ redisController.getResponseTimes = async (req, res, next) => {
     };
     //latency, needs to be enabled
     // const st = await redisClient.info('latencystats');
-    console.log(res.locals.latency);
+    // console.log(res.locals.latency);
     return next();
   } catch (err) {
     return next({

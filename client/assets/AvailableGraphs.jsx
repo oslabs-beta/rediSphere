@@ -15,7 +15,7 @@ const nameToComponent = {
     medium: <MemoryChart radius={100}></MemoryChart>,
     small: <MemoryChart radius={50}></MemoryChart>,
   },
-  evicted: {
+  evictedExpired: {
     large: <EvictedExpired></EvictedExpired>,
     medium: <EvictedExpired width={250} height={250}></EvictedExpired>,
   },

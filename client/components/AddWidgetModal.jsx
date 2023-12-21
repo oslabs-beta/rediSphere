@@ -4,6 +4,33 @@ import { SET_WIDGETS } from '../dashboardReducer.js';
 
 import nameToComponent from '../assets/AvailableGraphs.jsx';
 
+import largeCacheIcon from '../assets/large-cache-hit.png';
+import medCacheIcon from '../assets/med-cache-hit.png';
+import largeLatencyIcon from '../assets/large-latency.png';
+import medLatencyIcon from '../assets/med-latency.png';
+import largeEvExIcon from '../assets/large-evex.png';
+import medEvExIcon from '../assets/med-evex.png';
+import memoryIcon from '../assets/memory-usage.png';
+
+const buttonIcons = {
+  'large hitmiss': largeCacheIcon,
+  'medium hitmiss': medCacheIcon,
+  'large memory': memoryIcon,
+  'medium memory': memoryIcon,
+  'small memory': memoryIcon,
+  'large evictedExpired': largeEvExIcon,
+  'medium evictedExpired': medEvExIcon,
+  'large latency': largeLatencyIcon,
+  'medium latency': medLatencyIcon,
+};
+
+const nameMap = {
+  hitmiss: 'Cache Hit/Miss Ratio',
+  memory: 'Memory Usage',
+  evictedExpired: 'No. Eviction/Expiration',
+  latency: 'Av. Response Time',
+};
+
 const Modal = () => {
   const dispatch = useDispatch();
 
@@ -26,7 +53,9 @@ const Modal = () => {
           }}
           key={`${size} ${chart}`}
         >
-          {`${size} ${chart}`}
+          <img className={`${size}`} src={`${buttonIcons[`${size} ${chart}`]}`}></img>
+          <br></br>
+          {`${nameMap[`${chart}`]}`}
         </button>,
       );
     }
@@ -48,7 +77,7 @@ const Modal = () => {
         <p>
           <strong>{'Add a widget:'}</strong>
         </p>
-        <div>{buttonList}</div>
+        <div className="widget-button-container">{buttonList}</div>
       </div>
     </div>
   );

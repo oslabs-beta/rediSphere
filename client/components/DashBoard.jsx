@@ -14,7 +14,6 @@ const DashBoard = () => {
   //fetch user's widgets from user database on load
   const fetchWidgets = async () => {
     try {
-      console.log('hello');
       const res = await fetch('/users/widgets');
       const widgetArray = await res.json();
       dispatch(SET_WIDGETS(widgetArray));

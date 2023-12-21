@@ -11,7 +11,7 @@ const Chart = ({
 }) => {
   const [data, setData] = useState([]);
 
-  //get evicted/expired keys
+  //get latency
   const fetchData = async () => {
     try {
       const res = await fetch('/api/latency');
@@ -30,6 +30,7 @@ const Chart = ({
       });
     }, 1000);
   }, [data]);
+
   //take timestamp and overwrite with JS time instaed of server's native epoch time which is in microseconds
   //divide by 1000 to go from micro seconds to milli seconds
   let formattedData = data.map((d) => {
@@ -86,6 +87,24 @@ const Chart = ({
   if (data.length) {
     return (
       <svg width={width} height={height}>
+        <text
+          className="chart-label"
+          transform={`translate(-15,${(height - marginBottom) / 2 + 120}) rotate(-90)`}
+        >
+          {'Avg. Response Time (microseconds)'}
+        </text>
+        <text
+          className="chart-label"
+          transform={`translate(${(width - marginRight) / 2 - 20}, ${height - marginBottom + 35})`}
+        >
+          {'UTC Time'}
+        </text>
+        <text
+          className="chart-label"
+          transform={`translate(${width},${(height - marginBottom) / 2 - 30}) rotate(90)`}
+        >
+          {'Total Get Requests'}
+        </text>
         <g ref={gx} transform={`translate(0,${height - marginBottom})`} />
         <g ref={gy} transform={`translate(${marginLeft},0)`} />
         <g ref={gyl} transform={`translate(${width - marginRight},0)`} />
