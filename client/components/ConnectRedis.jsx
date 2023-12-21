@@ -9,7 +9,7 @@ const ConnectRedisPage = () => {
       data.host = document.getElementById('host').value;
       data.port = document.getElementById('port').value;
       data.redisPassword = document.getElementById('redis-password').value;
-      console.log(data);
+      // console.log(data);
       const response = await fetch('/users/connect-redis', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },

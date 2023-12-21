@@ -30,6 +30,7 @@ const LinePlot = ({
       });
     }, 1000);
   }, [data]);
+
   //take timestamp and overwrite with JS time instaed of server's native epoch time which is in microseconds
   //divide by 1000 to go from micro seconds to milli seconds
   let formattedData = data.map((d) => {
@@ -70,17 +71,77 @@ const LinePlot = ({
   useEffect(() => void d3.select(gy.current).call(d3.axisLeft(y)), [gy, y]);
 
   if (data.length) {
+    // console.log(formattedData);
+    const breakDownData = (key) => {
+      const array = [];
+      formattedData.forEach((el) => {
+        const obj = {};
+        obj[key] = el[key];
+        obj.timestamp = el.timestamp;
+        array.push(obj);
+      });
+      return array;
+    };
+    //something weird going on with evicted Line console errors,
+    //commented path out below
+    const evictedLine = breakDownData('evicted');
+    const expiredLine = breakDownData('expired');
+
+    // console.log('evicted', evictedLine);
+    // console.log('expired', expiredLine);
+
     return (
       <svg width={width} height={height}>
         <g ref={gx} transform={`translate(0,${height - marginBottom})`} />
+        <text
+          className="chart-label"
+          transform={`translate(-15,${(height - marginBottom) / 2 + 75}) rotate(-90)`}
+        >
+          {'No. Eviction/Expiration'}
+        </text>
         <g ref={gy} transform={`translate(${marginLeft},0)`} />
-        <path fill="none" stroke="blue" strokeWidth="1.5" d={line(formattedData)} />
+        <text
+          className="chart-label"
+          transform={`translate(${(width - marginRight) / 2 - 20}, ${height - marginBottom + 35})`}
+        >
+          {'UTC Time'}
+        </text>
+        <circle
+          cx={(width - marginRight) * 0.75}
+          cy={height - marginBottom - 70}
+          r="5"
+          style={{ fill: 'blue' }}
+        />
+        <text
+          className="legend-label"
+          transform={`translate(${(width - marginRight) * 0.75 + 10}, ${
+            height - marginBottom - 65
+          })`}
+        >
+          {'no. expired'}
+        </text>
+        <circle
+          cx={(width - marginRight) * 0.75}
+          cy={height - marginBottom - 50}
+          r="5"
+          style={{ fill: 'red' }}
+        />
+        <text
+          className="legend-label"
+          transform={`translate(${(width - marginRight) * 0.75 + 10}, ${
+            height - marginBottom - 45
+          })`}
+        >
+          {'no. evicted'}
+        </text>
+        <path fill="none" stroke="blue" strokeWidth="1.5" d={line(expiredLine)} />
         <g fill="none" stroke="blue" strokeWidth="1.5">
           {formattedData.map((d, i) => (
             <circle key={i} cx={x(d.timestamp)} cy={y(d.expired)} r=".75" />
           ))}
         </g>
-        <path fill="none" stroke="red" strokeWidth="1.5" d={line(formattedData)} />
+
+        {/* <path fill="none" stroke="red" strokeWidth="1.5" d={line(evictedLine)} /> */}
         <g fill="none" stroke="red" strokeWidth="1.5">
           {formattedData.map((d, i) => (
             <circle key={i} cx={x(d.timestamp)} cy={y(d.evicted)} r=".75" />

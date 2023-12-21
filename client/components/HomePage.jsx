@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Header from './Header';
+import Footer from './Footer';
 
 const HomePage = () => {
   return (
@@ -13,6 +14,7 @@ const HomePage = () => {
           cache-hit-misses all in one place and minimize unpleasant user experiences.
         </p>
       </div>
+      <Footer />
     </div>
   );
 };

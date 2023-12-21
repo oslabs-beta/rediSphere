@@ -7,7 +7,7 @@ const redisController = {};
 redisController.disconnectRedis = async (req, res, next) => {
   try {
     req.redisClient.disconnect();
-    console.log('Redis disconnected!');
+    // console.log('Redis disconnected!');
     return next();
   } catch (err) {
     return next({
@@ -31,8 +31,8 @@ redisController.connectUserRedis = async (req, res, next) => {
         port,
       },
     });
-    redisClient.connect();
-    console.log(`Connected to Redis Server: ${host} on port ${port}`);
+    await redisClient.connect();
+    // console.log(`Connected to Redis Server: ${host} on port ${port}`);
     req.redisClient = redisClient;
     return next();
   } catch (err) {
@@ -76,7 +76,7 @@ redisController.getCacheHitsRatio = async (req, res, next) => {
       cacheHitRatio: cacheHits + cacheMisses === 0 ? 0 : cacheHits / (cacheHits + cacheMisses),
       timestamp: timestamp,
     };
-    console.log(res.locals.stats);
+    // console.log(res.locals.stats);
   } catch (err) {
     return next({
       log: `redisController.getCacheHitsRatio error: ${err}`,
@@ -93,15 +93,8 @@ redisController.getCacheHitsRatio = async (req, res, next) => {
 //A positive metric value shows that your expired data is being cleaned up properly
 redisController.getEvictedExpired = async (req, res, next) => {
   try {
-    //store Redis client from middleware
     const redisClient = req.redisClient;
-    //connect to local redis instannce
-    // await redisClient.connect();
-    // //set one key to get *some* data to see the performance on
-    // await redisClient.set('test', 'hello');
-    //response is a giant array of comma and newline separated values, with sections delinated by '# <SectionHeader>',
     const stats = await redisClient.info();
-    //separate string into individual metrics and store in array
     const metrics = stats.split('\r\n');
     // console.log(metrics);
     let totalKeys = metrics.find((str) => str.startsWith('db'));
@@ -122,7 +115,7 @@ redisController.getEvictedExpired = async (req, res, next) => {
       expired: expired,
       timestamp: timestamp,
     };
-    console.log(res.locals.evictedExpired);
+    // console.log(res.locals.evictedExpired);
     return next();
   } catch (err) {
     return next({
@@ -160,7 +153,7 @@ redisController.getResponseTimes = async (req, res, next) => {
     };
     //latency, needs to be enabled
     // const st = await redisClient.info('latencystats');
-    console.log(res.locals.latency);
+    // console.log(res.locals.latency);
     return next();
   } catch (err) {
     return next({
@@ -190,14 +183,14 @@ redisController.getMemory = async (req, res, next) => {
     peakUsedMemory = Number(
       peakUsedMemory.slice(peakUsedMemory.indexOf(':') + 1, peakUsedMemory.length - 1),
     );
-    console.log(stats);
+    // console.log(stats);
     // totalMemory = Number(totalMemory.slice(totalMemory.indexOf(':') + 1, totalMemory.length - 1));
     res.locals.memory = {
       usedMemory: usedMemory,
       peakUsedMemory: peakUsedMemory,
       // totalMemory: totalMemory,
     };
-    console.log(res.locals.memory);
+    // console.log(res.locals.memory);
     return next();
   } catch (err) {
     return next({
