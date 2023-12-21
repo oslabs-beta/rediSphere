@@ -2,6 +2,67 @@ const User = require('../models/userModel');
 
 const userController = {};
 
+//get user's widgets array
+userController.getWidgets = async (req, res, next) => {
+  try {
+    const id = req.cookies.ssid;
+    const user = await User.findById(id);
+    res.locals.widgets = user.widgets;
+    // console.log(user.widgets);
+    return next();
+  } catch (err) {
+    return next({
+      log: 'userController getWidgets error',
+      message: 'could not get widgets',
+      status: 500,
+    });
+  }
+};
+
+//get user's widgets array
+userController.deleteWidget = async (req, res, next) => {
+  const indexToDelete = req.params.index;
+  try {
+    const id = req.cookies.ssid;
+    const user = await User.findById(id);
+    const newWidgets = user.widgets.toSpliced(indexToDelete, 1);
+    // console.log('newWidgets: ', newWidgets);
+    const update = await user.updateOne({ $set: { widgets: newWidgets } });
+    res.locals.widgets = newWidgets;
+    return next();
+  } catch (err) {
+    return next({
+      log: 'userController deleteWidgets error',
+      message: 'could not delete widget',
+      status: 500,
+    });
+  }
+};
+
+//add widget to user's widgets array, sends back whole widgets array
+userController.addWidget = async (req, res, next) => {
+  const { newWidget } = req.body;
+  try {
+    const id = req.cookies.ssid;
+    //new:true because default behavior (new: false)
+    //is to return the user document Before it updates
+    const update = await User.findByIdAndUpdate(
+      id,
+      { $push: { widgets: [newWidget] } },
+      { new: true },
+    );
+    res.locals.widgets = update.widgets;
+    // console.log(update.widgets);
+    return next();
+  } catch (err) {
+    return next({
+      log: 'userController add widget error',
+      message: 'could not add widget',
+      status: 500,
+    });
+  }
+};
+
 //add Redis credentials
 userController.addRedisCredentials = async (req, res, next) => {
   const { host, port, redisPassword } = req.body;
@@ -36,6 +97,7 @@ userController.createUser = async (req, res, next) => {
     });
     res.locals.message = 'ok';
     res.locals.userID = newUser.id;
+    res.locals.username = username;
     return next();
   } catch (err) {
     return next({
@@ -59,6 +121,7 @@ userController.verifyUser = async (req, res, next) => {
       if (passwordMatch) {
         res.locals.message = 'ok';
         res.locals.userID = userExists.id;
+        res.locals.username = username;
         return next();
       }
     }

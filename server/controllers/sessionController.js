@@ -10,6 +10,7 @@ sessionController.isLoggedIn = async (req, res, next) => {
       });
       if (sessionExists) {
         res.locals.session = true;
+        res.locals.username = sessionExists.username;
         return next();
       }
     }
@@ -27,8 +28,10 @@ sessionController.isLoggedIn = async (req, res, next) => {
 //startSession - create and save a new Session into the database.
 sessionController.startSession = async (req, res, next) => {
   const id = res.locals.userID;
+  const username = res.locals.username;
+  console.log(res.locals);
   try {
-    const session = await Session.create({ cookieId: id });
+    const session = await Session.create({ cookieId: id, username });
     return next();
   } catch (err) {
     return next({
