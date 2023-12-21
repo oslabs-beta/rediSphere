@@ -62,7 +62,7 @@ const Header = () => {
       </div>
       <div className="header-right">
         <button>about</button>
-        <button>contact</button>
+        <button onClick={() => navigate('/contact')}>contact</button>
         {buttons}
       </div>
     </header>

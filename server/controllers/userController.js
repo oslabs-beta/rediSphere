@@ -28,7 +28,6 @@ userController.deleteWidget = async (req, res, next) => {
     const newWidgets = user.widgets
       .slice(0, indexToDelete)
       .concat(user.widgets.slice(indexToDelete + 1));
-    //const newWidgets = user.widgets.toSpliced(indexToDelete, 1);
     // console.log('newWidgets: ', newWidgets);
     const update = await user.updateOne({ $set: { widgets: newWidgets } });
     res.locals.widgets = newWidgets;

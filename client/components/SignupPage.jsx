@@ -1,6 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import Footer from './Footer';
+
 const SignupPage = () => {
   const navigate = useNavigate();
   const handleClick = async () => {
@@ -59,6 +61,7 @@ const SignupPage = () => {
         {'Already have an account? '}
         <a href="/login">Log in here</a>
       </div>
+      <Footer />
     </div>
   );
 };
