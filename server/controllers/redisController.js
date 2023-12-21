@@ -154,7 +154,7 @@ redisController.getResponseTimes = async (req, res, next) => {
     };
     //latency, needs to be enabled
     // const st = await redisClient.info('latencystats');
-    // console.log(res.locals.latency);
+    console.log(res.locals.latency);
     return next();
   } catch (err) {
     return next({

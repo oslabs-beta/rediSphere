@@ -102,14 +102,15 @@ function runCacheFill(client) {
   //while memory used < 30MB
   //set more keys
 
-  for (let i = 1; i < 50; i++) {
-    client.setEx(`${i}`, 30, generateRandomValue(1000000));
+  for (let i = 0; i < 50; i++) {
+    client.setEx(`${i}`, 60, generateRandomValue(1000000));
+    client.get(`${i}`);
   }
 }
 
 function getLeastRecentKey(client) {
-  for (let i = 0; i < 26; i++) {
-    client.get(`${i}`, generateRandomValue());
+  for (let i = 0; i < 50; i++) {
+    client.get(`${i}`);
   }
 }
 
