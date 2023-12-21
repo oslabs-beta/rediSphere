@@ -3,7 +3,7 @@ body {
   flex-direction: column;
   align-items: center;
   margin: 0;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: 'Chakra Petch', sans-serif;
 }
 
 h2,
@@ -60,9 +60,10 @@ button:hover {
 
 header {
   background-color: aliceblue;
+  color: black;
   display: flex;
   justify-content: space-between;
-  padding: 20px;
+  padding: 0 20px;
   width: inherit;
 
   .header-left {
@@ -83,6 +84,7 @@ header {
       margin-left: 15px;
       border: none;
       background-color: inherit;
+      color: inherit;
       border-radius: 10px;
       padding: 10px;
       font-size: large;
@@ -97,38 +99,87 @@ header {
 }
 
 .widget-container {
-  padding: 20px;
+  margin-top: 20px;
   display: grid;
-  grid-gap: 15px;
-  grid-template-columns: repeat(6, auto);
-  align-items: center;
+  grid-template-columns: repeat(8, 150px);
+  grid-auto-rows: 150px;
+  gap: 10px;
 
   .widget {
-    box-shadow: inset 0px 0px 0px 1px black;
-    height: 400px;
-    width: 550px;
-    /* grid-column: 1 / span 4;
-    grid-row: 1 / span 3; */
+    box-sizing: border-box;
+    border: 1px solid black;
     border-radius: 20px;
-    padding: 25px;
     background-color: rgb(255, 253, 253);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 10px;
+    position: relative;
+
+    button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+
+      background-color: pink;
+      border: none;
+      border-radius: 20px;
+      height: 25px;
+      width: 25px;
+      opacity: 0.2;
+      padding: 0;
+      color: white;
+    }
+    button:hover {
+      opacity: 1;
+      transform: scale(1.08);
+    }
   }
 
   .small {
-    height: 100px;
-    width: 100px;
-    grid-column: 5;
-    grid-row: 1;
+    /* height: 150px;
+    width: 150px; */
+    grid-column: span 1;
+    grid-row: span 1;
+    padding: 10px;
   }
 
   .medium {
-    height: 250px;
-    width: 250px;
-    grid-column: 5 / span 2;
-    grid-row: 2 / span 2;
+    /* height: 300px;
+    width: 300px; */
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+
+  .large {
+    /* height: 450px;
+    width: 600px; */
+    grid-column: span 4;
+    grid-row: span 3;
   }
 }
 
+svg {
+  overflow: visible;
+  margin: 0 0 15px 15px;
+  g {
+    font-family: inherit;
+    font-size: xx-small;
+    font-weight: bold;
+  }
+  .chart-label {
+    font-size: small;
+    font-weight: bold;
+  }
+  .legend-label {
+    font-size: small;
+  }
+}
+.memory-chart {
+  margin: 0;
+}
 #add-widget-button {
   position: fixed;
   bottom: 3vh;
@@ -145,4 +196,107 @@ header {
 #add-widget-button:hover {
   transform: scale(1.08);
   opacity: 1;
+}
+
+.modal {
+  z-index: 2;
+  width: 60vw;
+  height: 80vh;
+  left: 50%;
+  top: 50%;
+  position: fixed;
+  background-color: aliceblue;
+  font-size: 20px;
+  transform: scale(0);
+  transition: 200ms ease-in-out;
+  border-radius: 10px;
+  padding: 20px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.widget-button-container {
+  padding: 20px;
+  overflow-y: auto;
+  button {
+    font: inherit;
+    margin: 10px;
+    background-color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 15px;
+    .large {
+      height: 225px;
+      width: 300px;
+    }
+
+    .medium {
+      height: 200px;
+      width: 200px;
+    }
+
+    .small {
+      height: 100px;
+      width: 100px;
+    }
+  }
+  button:hover {
+    background-color: gainsboro;
+  }
+}
+
+.modal.active {
+  transform: translate(-50%, -50%) scale(1);
+  margin: 0;
+}
+
+#x-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  border-radius: 30px;
+  background-color: red;
+  color: white;
+  border: none;
+  opacity: 0.2;
+}
+#x-button:hover {
+  opacity: 0.5;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  opacity: 0.5;
+  display: none;
+  z-index: 1;
+}
+
+.overlay.active {
+  display: flex;
+}
+
+footer {
+  margin: 10px auto;
+  /* position: fixed;
+  bottom: 1vh; */
+  .github-logo {
+    margin-left: 10px;
+    height: 20px;
+    width: 20px;
+    transition: transform 0.3s ease-in-out;
+  }
+  .github-logo:hover {
+    transform: rotate(360deg) scale(1.2);
+  }
 }

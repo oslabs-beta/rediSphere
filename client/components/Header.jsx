@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { SET_USER } from '../dashboardReducer.js';
 
 const Header = () => {
   const [buttons, setButtons] = useState([]);

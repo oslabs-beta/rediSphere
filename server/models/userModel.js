@@ -9,6 +9,14 @@ const userSchema = new Schema({
   host: { type: String },
   port: { type: String },
   redisPassword: { type: String },
+  widgets: {
+    type: Array,
+    default: [
+      ['large', 'hitmiss'],
+      ['small', 'memory'],
+      ['medium', 'hitmiss'],
+    ],
+  },
 });
 
 // ====== BCRYPT ENCRYPTION ======
