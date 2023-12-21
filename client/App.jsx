@@ -8,6 +8,7 @@ import LoginPage from './components/LoginPage.jsx';
 import SignupPage from './components/SignupPage.jsx';
 import DashBoard from './components/DashBoard.jsx';
 import ConnectRedisPage from './components/ConnectRedis.jsx';
+import ContactPage from './components/Contact.jsx';
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/connectredis" element={<ConnectRedisPage />} />
       <Route path="/dashboard" element={<DashBoard />} />
+      <Route path="/contact" element={<ContactPage />} />
     </Routes>
   );
 };
