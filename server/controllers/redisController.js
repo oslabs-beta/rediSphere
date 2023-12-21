@@ -135,12 +135,19 @@ redisController.getResponseTimes = async (req, res, next) => {
     const stats = await redisClient.info();
     const metrics = stats.split('\r\n');
     let timestamp = metrics.find((str) => str.startsWith('server_time_usec'));
+    console.log('timestamp in RT: ', timestamp);
     let commandsProcessed = metrics.find((str) => str.startsWith('total_commands_processed'));
+    console.log('commandsProcessed in RT: ', commandsProcessed);
     commandsProcessed = Number(commandsProcessed.slice(commandsProcessed.indexOf(':') + 1));
     timestamp = Number(timestamp.slice(timestamp.indexOf(':') + 1));
+
     const cmdstats = await redisClient.info('commandstats');
+    console.log('cmdstat in RT: ', cmdstats);
+
     const cmdmetrics = cmdstats.split('\r\n');
+    console.log('cmdmetrics: ', cmdmetrics);
     let avgGetCacheTime = cmdmetrics.find((str) => str.startsWith('cmdstat_get'));
+    console.log('avgGetCacheTime in RT: ', avgGetCacheTime);
     let totalGet = avgGetCacheTime;
     // console.log('*******', avgGetCacheTime);
     // time is in microseconds
