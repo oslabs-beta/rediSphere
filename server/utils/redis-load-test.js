@@ -104,7 +104,7 @@ function runCacheFill(client) {
   //set more keys
 
   for (let i = 1; i < 50; i++) {
-    client.setEx(`${i}`, 30, generateRandomValue(1000000));
+    client.setEx(`${i}`, 30, generateRandomValue(Math.floor(Math.random() * 1000000)));
   }
 }
 

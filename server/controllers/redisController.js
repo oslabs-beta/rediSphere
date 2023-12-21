@@ -84,12 +84,6 @@ redisController.getCacheHitsRatio = async (req, res, next) => {
       status: 500,
     });
   }
-
-  // console.log('cachehitratio', res.locals.cacheHitRatio);
-  res.locals.stats = {
-    cacheHitRatio: cacheHits + cacheMisses === 0 ? 0 : cacheHits / (cacheHits + cacheMisses),
-    timestamp: timestamp,
-  };
   //console.log('cachehitratio', res.locals.stats);
   return next();
 };
@@ -195,7 +189,7 @@ redisController.getMemory = async (req, res, next) => {
     peakUsedMemory = Number(
       peakUsedMemory.slice(peakUsedMemory.indexOf(':') + 1, peakUsedMemory.length - 1),
     );
-    console.log(stats);
+    //console.log(stats);
     // totalMemory = Number(totalMemory.slice(totalMemory.indexOf(':') + 1, totalMemory.length - 1));
     res.locals.memory = {
       usedMemory: usedMemory,
