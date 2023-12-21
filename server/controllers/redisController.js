@@ -101,10 +101,11 @@ redisController.getEvictedExpired = async (req, res, next) => {
     let evicted = metrics.find((str) => str.startsWith('evicted_keys'));
     let expired = metrics.find((str) => str.startsWith('expired_keys'));
     let timestamp = metrics.find((str) => str.startsWith('server_time_usec'));
-    totalKeys = Number(totalKeys.slice(totalKeys.indexOf('=') + 1, totalKeys.indexOf(',')));
-    evicted = Number(evicted.slice(evicted.indexOf(':') + 1));
-    expired = Number(expired.slice(expired.indexOf(':') + 1));
-    timestamp = Number(timestamp.slice(timestamp.indexOf(':') + 1));
+    if (totalKeys)
+      totalKeys = Number(totalKeys.slice(totalKeys.indexOf('=') + 1, totalKeys.indexOf(',')));
+    if (evicted) evicted = Number(evicted.slice(evicted.indexOf(':') + 1));
+    if (expired) expired = Number(expired.slice(expired.indexOf(':') + 1));
+    if (timestamp) timestamp = Number(timestamp.slice(timestamp.indexOf(':') + 1));
     // console.log('total keys', totalKeys);
     // console.log('evicted caches', evicted);
     // console.log('expired caches', expired);
