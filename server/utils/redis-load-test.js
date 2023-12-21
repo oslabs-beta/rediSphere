@@ -98,13 +98,12 @@ function setWindows(periods, startTime, timeLimit) {
   return windows;
   //returns [{start: 1700894, end: 1800894}, {start: ... , end: ...}]
 }
-
 function runCacheFill(client) {
   //while memory used < 30MB
   //set more keys
 
   for (let i = 1; i < 50; i++) {
-    client.setEx(`${i}`, 30, generateRandomValue(Math.floor(Math.random() * 1000000)));
+    client.setEx(`${i}`, 30, generateRandomValue(1000000));
   }
 }
 
@@ -137,7 +136,7 @@ module.exports = function createLoadTest({
 
     client.on('ready', () => {
       clients.push(client);
-      //console.log(clients);
+      console.log(clients);
     });
     client.on('error', (err) => {
       console.error(err);
@@ -170,25 +169,27 @@ module.exports = function createLoadTest({
         //   getLeastRecentKey(c);
         // }
         //c.set('103', generateRandomValue());
+        //await c.connect();
         runCacheFill(c); //set keys is async --> if it isn't complete, still goes to check the totalOps and endTime
         //opFn(c, totalKeys);
         //runRandomOp(c);
+        // c.disconnect();
         opsCount++;
       });
 
-      //console.log(`Simulating ${totalClients} clients`);
-      // if (opsCount >= totalOps || Date.now() > endTime) {
-      //   clearInterval(interval);
-      //   clients.forEach((c) => {
-      //     try {
-      //       c.disconnect().then(console.log('disconnected!'));
-      //     } catch (err) {
-      //       console.error(err);
-      //     }
-      //   });
-      //   resolve();
-      // }
+      console.log(`Simulating ${totalClients} clients`);
+      if (opsCount >= totalOps || Date.now() > endTime) {
+        clearInterval(interval);
+        clients.forEach((c) => {
+          try {
+            c.disconnect().then(console.log('disconnected!'));
+          } catch (err) {
+            console.error(err);
+          }
+        });
+        resolve();
+      }
       if (windows[window].end < now) window++;
-    }, 2000);
+    }, 50);
   });
 };
