@@ -11,27 +11,7 @@ const LinePlot = ({
 }) => {
   const [data, setData] = useState([]);
 
-  // //get evicted/expired keys
-  // const fetchData = async () => {
-  //   try {
-  //     const res = await fetch('/api/evictedExpired');
-  //     const newData = await res.json();
-  //     return newData;
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // //everytime data is updated, set timeout is called again
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     fetchData().then((data) => {
-  //       setData((prevData) => [...prevData, data]);
-  //     });
-  //   }, 1000);
-  // }, [data]);
-
-  //get cache hits ratio
+  //get evictedExpired data
   const fetchData = async () => {
     try {
       const res = await fetch('/api/evictedExpired');
@@ -42,7 +22,7 @@ const LinePlot = ({
     }
   };
 
-  // every time cache hit data is updated, set timeout is called again
+  // every data is updated, set timeout is called again, but only *after* data has completed
   useEffect(() => {
     setTimeout(() => {
       fetchData();
@@ -52,7 +32,6 @@ const LinePlot = ({
   //take timestamp and overwrite with JS time instaed of server's native epoch time which is in microseconds
   //divide by 1000 to go from micro seconds to milli seconds
   let formattedData = data.flatMap((d) => {
-    //use flatMap to skip nullish/undefined/NaN vals
     //after mapping, it "flattens" every element--> empty arrays just get removed, effectively filtering
     if (d.evicted === null || d.evicted === undefined) {
       // Filter out data point if null, or undefined
@@ -100,15 +79,47 @@ const LinePlot = ({
     .domain([0, yMax || 1])
     .range([height - marginBottom, marginTop]);
 
+  //map formattedData to expiredData w/generic timestamp value keys
   const expiredData = formattedData.map((d) => ({
     timestamp: d.timestamp,
     val: d.expired,
   }));
 
+  //map formattedData to expiredData w/generic timestamp value keys
   const evictedData = formattedData.map((d) => ({
     timestamp: d.timestamp,
     val: d.evicted,
   }));
+
+  //TODO
+  //refactor for modularity
+  //if we passed in *all* the data that could be used, and a timestamp,
+  //a generic mapping function could work to set any key on the data object in the array to the "value"
+  /** data =
+   * [
+   *  {
+   *   cacheHits : number,
+   *   cacheMisses : number,
+   *   evictions : number,
+   *   expirations : number,
+   *   memoryMax: number,
+   *   memoryCurrent: number,
+   *   totalKeys: number
+   *   timestamp : number
+   *  },
+   *  {..}, {..}, ...
+   * ]
+   * */
+  // //and then use:
+  // function genericDataMap(dataArray, xKey, yKey) {
+  //   return dataArray.map((d) => ({
+  //     timestamp: d[xKey],
+  //     val: d[yKey],
+  //   }));
+  // }
+
+  // const evictedData = genericDataMap(formattedData, timestamp, evicted);
+  // const expiredData = genericDataMap(formattedData, timestamp, expired);
 
   const line = d3
     .line()
@@ -119,25 +130,6 @@ const LinePlot = ({
   useEffect(() => void d3.select(gy.current).call(d3.axisLeft(y)), [gy, y]);
 
   if (data.length) {
-    // console.log(formattedData);
-    // const breakDownData = (key) => {
-    //   const array = [];
-    //   formattedData.forEach((el) => {
-    //     const obj = {};
-    //     obj.val = el[key];
-    //     obj.timestamp = el.timestamp;
-    //     array.push(obj);
-    //   });
-    //   return array;
-    // };
-    //something weird going on with evicted Line console errors,
-    //commented path out below
-    // const evictedLine = breakDownData('evicted');
-    // const expiredLine = breakDownData('expired');
-
-    // console.log('evicted', evictedLine);
-    // console.log('expired', expiredLine);
-
     return (
       <svg width={width} height={height}>
         <g ref={gx} transform={`translate(0,${height - marginBottom})`} />
