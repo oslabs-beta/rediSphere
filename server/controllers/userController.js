@@ -21,14 +21,13 @@ userController.getWidgets = async (req, res, next) => {
 
 //get user's widgets array
 userController.deleteWidget = async (req, res, next) => {
-  const indexToDelete = req.params.index;
+  const indexToDelete = parseInt(req.params.index);
   try {
     const id = req.cookies.ssid;
     const user = await User.findById(id);
     const newWidgets = user.widgets
       .slice(0, indexToDelete)
       .concat(user.widgets.slice(indexToDelete + 1));
-    // console.log('newWidgets: ', newWidgets);
     const update = await user.updateOne({ $set: { widgets: newWidgets } });
     res.locals.widgets = newWidgets;
     return next();
