@@ -103,7 +103,7 @@ function runCacheFill(client) {
   //set more keys
 
   for (let i = 0; i < 50; i++) {
-    client.setEx(`${i}`, 60, generateRandomValue(1000000));
+    client.setEx(`${i}`, 120, generateRandomValue(1000000));
     client.get(`${i}`);
   }
 }
