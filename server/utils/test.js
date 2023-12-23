@@ -3,9 +3,9 @@ const createLoadTest = require('./redis-load-test');
 //const createLoadTest = require('./update.js');
 
 const options = {
-  totalClients: 3,
+  totalClients: 1,
   totalOps: 100000,
-  timeLimit: 15,
+  timeLimit: 30,
   targets: 3,
 };
 

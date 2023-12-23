@@ -53,7 +53,7 @@ function createConfiguredClient() {
 
 function runHitOp(client) {
   //const key = [...usedKeys][Math.floor(Math.random() * usedKeys.size)];
-  client.setEx('hit_key', 10, generateRandomValue());
+  client.setEx('hit_key', 45, generateRandomValue(1000));
   //client.setEx('hit_key', 10, 'value');
   client.get('hit_key', (err, res) => {
     if (err) {
@@ -102,8 +102,8 @@ function runCacheFill(client) {
   //while memory used < 30MB
   //set more keys
 
-  for (let i = 1; i < 50; i++) {
-    client.setEx(`${i}`, 45, generateRandomValue(1000000));
+  for (let i = 1; i < 30; i++) {
+    client.setEx(`${i}`, 15, generateRandomValue(1000000));
   }
 }
 
