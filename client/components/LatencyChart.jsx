@@ -16,7 +16,7 @@ const Chart = ({
     try {
       const res = await fetch('/api/latency');
       const newData = await res.json();
-      return newData;
+      setData([...data, newData]);
     } catch (error) {
       console.log(error);
     }
@@ -25,9 +25,7 @@ const Chart = ({
   //everytime data is updated, set timeout is called again
   useEffect(() => {
     setTimeout(() => {
-      fetchData().then((data) => {
-        setData((prevData) => [...prevData, data]);
-      });
+      fetchData();
     }, 1000);
   }, [data]);
 
@@ -75,23 +73,14 @@ const Chart = ({
   useEffect(() => void d3.select(gy.current).call(d3.axisLeft(y)), [gy, y]);
   useEffect(() => void d3.select(gyl.current).call(d3.axisRight(yLine)), [gyl, yLine]);
 
-  //   function getRandomColor() {
-  //     const letters = '0123456789ABCDEF';
-  //     let color = '#';
-  //     for (let i = 0; i < 6; i++) {
-  //       color += letters[Math.floor(Math.random() * 16)];
-  //     }
-  //     return color;
-  //   }
-
   if (data.length) {
     return (
       <svg width={width} height={height}>
         <text
           className="chart-label"
-          transform={`translate(-15,${(height - marginBottom) / 2 + 120}) rotate(-90)`}
+          transform={`translate(-15,${(height - marginBottom) / 2 + 100}) rotate(-90)`}
         >
-          {'Avg. Response Time (microseconds)'}
+          {'Avg. Response Time (ms)'}
         </text>
         <text
           className="chart-label"

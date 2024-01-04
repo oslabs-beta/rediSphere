@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { SET_USER } from '../dashboardReducer.js';
 import { useDispatch } from 'react-redux';
 
+import Footer from './Footer.jsx';
+
 const LoginPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -54,6 +56,8 @@ const LoginPage = () => {
         {'New to Cache App? '}
         <a href="/signup">Create an account</a>
       </div>
+
+      <Footer />
     </div>
   );
 };

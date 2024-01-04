@@ -8,10 +8,19 @@ const HomePage = () => {
     <div className="home-page">
       <Header />
       <div className="main-content">
-        <h1>Discover critical Redis performance issues in real-time</h1>
+        <h1>Discover critical Redis performance issues in real-time with Cache App</h1>
+        <h3>Background</h3>
         <p>
-          Use CacheApp and discover critical performance issues in real-time. View your latency and
-          cache-hit-misses all in one place and minimize unpleasant user experiences.
+          Redis databases are often used by developers as a caching database. Monitoring performance
+          metrics is critical to production and development to optimize cache performance.
+          Developers will want to monitor their database metrics in real time to quickly resolve
+          issues, but current Redis tools are more focused on database administration, and metrics
+          graphs are not customizable.
+        </p>
+        <h3>Our Solution</h3>
+        <p>
+          We've created a web app with a simple, intuitive UI to allow users to customize and view
+          the relevant Redis performance metrics to their project.
         </p>
       </div>
       <Footer />

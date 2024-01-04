@@ -59,7 +59,7 @@ button:hover {
 }
 
 header {
-  background-color: aliceblue;
+  background-color: #d3edff;
   color: black;
   display: flex;
   justify-content: space-between;
@@ -107,7 +107,7 @@ header {
 
   .widget {
     box-sizing: border-box;
-    border: 1px solid black;
+    border: 1px solid gray;
     border-radius: 20px;
     background-color: rgb(255, 253, 253);
     display: flex;
@@ -143,7 +143,8 @@ header {
     width: 150px; */
     grid-column: span 1;
     grid-row: span 1;
-    padding: 10px;
+    align-items: flex-start;
+    padding: 5px;
   }
 
   .medium {
@@ -224,12 +225,13 @@ svg {
   button {
     font: inherit;
     margin: 10px;
-    background-color: white;
+    background-color: rgb(255, 253, 253);
     border: none;
     border-radius: 20px;
     padding: 15px;
+
     .large {
-      height: 225px;
+      height: auto;
       width: 300px;
     }
 
@@ -244,7 +246,7 @@ svg {
     }
   }
   button:hover {
-    background-color: gainsboro;
+    border: solid gray;
   }
 }
 
@@ -287,7 +289,7 @@ svg {
 }
 
 footer {
-  margin: 10px auto;
+  margin: 20px auto;
   /* position: fixed;
   bottom: 1vh; */
   .github-logo {
