@@ -53,7 +53,7 @@ function createConfiguredClient() {
 
 function runHitOp(client) {
   //const key = [...usedKeys][Math.floor(Math.random() * usedKeys.size)];
-  client.set('hit_key', generateRandomValue());
+  client.setEx('hit_key', 45, generateRandomValue(1000));
   //client.setEx('hit_key', 10, 'value');
   client.get('hit_key', (err, res) => {
     if (err) {
@@ -102,9 +102,14 @@ function runCacheFill(client) {
   //while memory used < 30MB
   //set more keys
 
+<<<<<<< HEAD
   for (let i = 0; i < 50; i++) {
     client.setEx(`${i}`, 120, generateRandomValue(1000000));
     client.get(`${i}`);
+=======
+  for (let i = 1; i < 30; i++) {
+    client.setEx(`${i}`, 15, generateRandomValue(1000000));
+>>>>>>> de0bf9a6c4962e003a1ea314fbc1977cce7e684c
   }
 }
 
@@ -124,9 +129,9 @@ function getLeastRecentKey(client) {
 module.exports = function createLoadTest({
   totalClients = 5,
   totalOps = 1000,
-  timeLimit = 60, // seconds
+  timeLimit = 15, // seconds
   totalKeys = 1000000,
-  targets = 4,
+  targets = 3,
 }) {
   const clients = [];
 
@@ -166,12 +171,28 @@ module.exports = function createLoadTest({
       const opFn = isEven ? runHitOp : runHitOp;
 
       clients.forEach((c) => {
+        switch (window) {
+          case 0:
+            runMissOp(c, 100);
+            console.log('missOp');
+            break;
+          case 1:
+            runHitOp(c);
+            console.log('hitOp');
+            break;
+          case 2:
+            runCacheFill(c);
+            console.log('cacheFill');
+            break;
+        }
+
         // for (let i = 0; i < 10; i++) {
         //   getLeastRecentKey(c);
         // }
         //c.set('103', generateRandomValue());
         //await c.connect();
-        runCacheFill(c); //set keys is async --> if it isn't complete, still goes to check the totalOps and endTime
+
+        //runCacheFill(c); //set keys is async --> if it isn't complete, still goes to check the totalOps and endTime
         //opFn(c, totalKeys);
         //runRandomOp(c);
         // c.disconnect();
