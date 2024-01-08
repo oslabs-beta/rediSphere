@@ -28,7 +28,8 @@ userController.deleteWidget = async (req, res, next) => {
     const newWidgets = user.widgets
       .slice(0, indexToDelete)
       .concat(user.widgets.slice(indexToDelete + 1));
-    const update = await user.updateOne({ $set: { widgets: newWidgets } });
+    //$set update aggregator operator in mongoDB
+    await user.updateOne({ $set: { widgets: newWidgets } });
     res.locals.widgets = newWidgets;
     return next();
   } catch (err) {
@@ -69,7 +70,10 @@ userController.addRedisCredentials = async (req, res, next) => {
   const { host, port, redisPassword } = req.body;
   try {
     const id = req.cookies.ssid;
-    const update = await User.updateOne({ _id: id }, { $set: { host, port, redisPassword } });
+    //can we do the update w/o storing it in update? update not referenced after
+    //could do findByIdAndUpdate like in previous middleware
+    //update vs set to be future-proof for updating id's is good; may need to refactor to $push for when we have multiple Redis connection
+    await User.findByIdAndUpdate(id, { $set: { host, port, redisPassword } });
     res.locals.message = 'ok';
     return next();
   } catch (err) {
