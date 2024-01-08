@@ -2,12 +2,78 @@ const User = require('../models/userModel');
 
 const userController = {};
 
+//get user's widgets array
+userController.getWidgets = async (req, res, next) => {
+  try {
+    const id = req.cookies.ssid;
+    const user = await User.findById(id);
+    res.locals.widgets = user.widgets;
+    // console.log(user.widgets);
+    return next();
+  } catch (err) {
+    return next({
+      log: 'userController getWidgets error',
+      message: 'could not get widgets',
+      status: 500,
+    });
+  }
+};
+
+//get user's widgets array
+userController.deleteWidget = async (req, res, next) => {
+  const indexToDelete = parseInt(req.params.index);
+  try {
+    const id = req.cookies.ssid;
+    const user = await User.findById(id);
+    const newWidgets = user.widgets
+      .slice(0, indexToDelete)
+      .concat(user.widgets.slice(indexToDelete + 1));
+    //$set update aggregator operator in mongoDB
+    await user.updateOne({ $set: { widgets: newWidgets } });
+    res.locals.widgets = newWidgets;
+    return next();
+  } catch (err) {
+    return next({
+      log: 'userController deleteWidgets error',
+      message: 'could not delete widget',
+      status: 500,
+    });
+  }
+};
+
+//add widget to user's widgets array, sends back whole widgets array
+userController.addWidget = async (req, res, next) => {
+  const { newWidget } = req.body;
+  try {
+    const id = req.cookies.ssid;
+    //new:true because default behavior (new: false)
+    //is to return the user document Before it updates
+    const update = await User.findByIdAndUpdate(
+      id,
+      { $push: { widgets: [newWidget] } },
+      { new: true },
+    );
+    res.locals.widgets = update.widgets;
+    // console.log(update.widgets);
+    return next();
+  } catch (err) {
+    return next({
+      log: 'userController add widget error',
+      message: 'could not add widget',
+      status: 500,
+    });
+  }
+};
+
 //add Redis credentials
 userController.addRedisCredentials = async (req, res, next) => {
   const { host, port, redisPassword } = req.body;
   try {
     const id = req.cookies.ssid;
-    const update = await User.updateOne({ _id: id }, { $set: { host, port, redisPassword } });
+    //can we do the update w/o storing it in update? update not referenced after
+    //could do findByIdAndUpdate like in previous middleware
+    //update vs set to be future-proof for updating id's is good; may need to refactor to $push for when we have multiple Redis connection
+    await User.findByIdAndUpdate(id, { $set: { host, port, redisPassword } });
     res.locals.message = 'ok';
     return next();
   } catch (err) {

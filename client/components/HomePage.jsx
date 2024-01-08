@@ -1,23 +1,47 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import Header from './Header';
+import Footer from './Footer';
+
+import whiteLogo from '../assets/white-background-redisphere-logo.png';
 
 const HomePage = () => {
+  const navigate = useNavigate();
   return (
     <div className="home-page">
       <Header />
       <div className="main-content">
-        <h1>Do you like visualizing Redis metrics?</h1>
-        <h3>We have just the app for you.</h3>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-          ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-          ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
-          sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
-          est laborum.
-        </p>
+        <div className="intro">
+          <div className="intro-left">
+            <img id="intro-logo" src={whiteLogo}></img>
+            <h1>
+              Monitor your Redis performance metrics with <em>rediSphere</em>.
+            </h1>
+            <button onClick={() => navigate('/signup')}>Get Started</button>
+          </div>
+          <img id="example" className="key-feature"></img>
+        </div>
+
+        <div className="key-features-container">
+          <div className="key-feature">
+            <h2>Placeholder</h2>
+            <p>description</p>
+          </div>
+          <div className="key-feature">
+            <h2>Visualize Live Redis Metrics</h2>
+            <p>
+              rediSphere offers live Redis performance visualization in an intuitive, user-friendly
+              dashboard. Developers can easily diagnose and resolve performance issues.
+            </p>
+          </div>
+          <div className="key-feature">
+            <h2>Placeholder</h2>
+            <p>description</p>
+          </div>
+        </div>
       </div>
+      <Footer />
     </div>
   );
 };

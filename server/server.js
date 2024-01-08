@@ -1,3 +1,5 @@
+//consider refactor to import
+
 const express = require('express');
 //import 'express-async-errors'
 //const cors = require('cors');
@@ -16,7 +18,7 @@ const app = express();
 // handle parsing request body
 app.use(cookieParser());
 app.use(express.json()); // parses body EXCEPT html
-app.use(express.urlencoded({ extended: true })); // parses html
+app.use(express.urlencoded({ extended: true })); // requires header to parse
 
 if (process.env.NODE_ENV === 'production') {
   // statically serve everything in the build folder on the route '/build'
