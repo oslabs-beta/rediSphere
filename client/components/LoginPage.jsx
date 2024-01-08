@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { SET_USER } from '../dashboardReducer.js';
+// import { SET_USER } from '../dashboardReducer.js';
 import { useDispatch } from 'react-redux';
 
 import Footer from './Footer.jsx';
@@ -22,7 +22,7 @@ const LoginPage = () => {
 
     if (result === 'not ok') return alert('login failed. try again.');
     if (result === 'ok') {
-      dispatch(SET_USER(data.username));
+      // dispatch(SET_USER(data.username));
       return navigate('/dashboard');
     }
   };

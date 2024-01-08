@@ -1,5 +1,4 @@
-import * as d3 from 'd3';
-import React, { useState } from 'react';
+import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import './styles.css';
 
