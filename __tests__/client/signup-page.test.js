@@ -34,7 +34,7 @@ describe('homepage react component test', () => {
     // act
     const userNameLabel = screen.getByLabelText('Username');
     const passwordLabel = screen.getByLabelText('Password');
-    const passwordConfirmationLabel = screen.getByLabelText('Confirm Password');
+    const passwordConfirmationLabel = screen.getByLabelText('Confirm password');
 
     const formSubmitButton = screen.getByText("Let's go!");
 
