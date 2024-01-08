@@ -21,9 +21,14 @@ redisController.connectUserRedis = async (req, res, next) => {
         port,
       },
     });
+    const redisClient = createClient({
+      url: `redis://redis-18340.c323.us-east-1-2.ec2.cloud.redislabs.com'
+    });
     //does the client need to be *connected* yet?
     await redisClient.connect();
-    // console.log(`Connected to Redis Server: ${host} on port ${port}`);
+    await redisClient.on('ready', () => console.log('server_info:', redisClient.server_info));
+
+    console.log(`Connected to Redis Server: ${host} on port ${port}`);
     req.redisClient = redisClient;
     return next();
   } catch (err) {
@@ -47,6 +52,7 @@ redisController.disconnectRedis = async (req, res, next) => {
     //disconnect() ends immediately, and any pending replies are lost
     //does this need an await? disconnect() returns a promise;
     //added an await below, performs the same, probably "better" overall
+    //console.log(req.redisClient.server_info);
     await req.redisClient.disconnect();
     // console.log('Redis disconnected!');
     return next();
@@ -80,8 +86,6 @@ redisController.getCacheHitsRatio = async (req, res, next) => {
 
     //separate string into individual metrics and store in array
     const metrics = stats.split('\r\n');
-
-    console.log(metrics);
     //every line in stats becomes its own element in the array
     let cacheHits = metrics.find((str) => str.startsWith('keyspace_hits'));
     // '#Stats
@@ -96,17 +100,12 @@ redisController.getCacheHitsRatio = async (req, res, next) => {
     cacheMisses = Number(cacheMisses.slice(cacheMisses.indexOf(':') + 1));
     timestamp = Number(timestamp.slice(timestamp.indexOf(':') + 1));
 
-    // console.log('hits', cacheHits);
-    // console.log('misses', cacheMisses);
-    // console.log('timestamp in microseconds since unix epoch', timestamp);
-
     //if ratio lower than -0.8,  then a significant amount of the requested keys are evicted, expired, or do not exist at all
 
     res.locals.stats = {
       cacheHitRatio: cacheHits + cacheMisses === 0 ? 0 : cacheHits / (cacheHits + cacheMisses),
       timestamp: timestamp,
     };
-    // console.log(res.locals.stats);
   } catch (err) {
     return next({
       log: `redisController.getCacheHitsRatio error: ${err}`,
@@ -115,7 +114,6 @@ redisController.getCacheHitsRatio = async (req, res, next) => {
     });
   }
 
-  // console.log('cachehitratio', res.locals.cacheHitRatio);
   return next();
 };
 
@@ -136,10 +134,7 @@ redisController.getEvictedExpired = async (req, res, next) => {
     if (evicted) evicted = Number(evicted.slice(evicted.indexOf(':') + 1));
     if (expired) expired = Number(expired.slice(expired.indexOf(':') + 1));
     if (timestamp) timestamp = Number(timestamp.slice(timestamp.indexOf(':') + 1));
-    // console.log('total keys', totalKeys);
-    // console.log('evicted caches', evicted);
-    // console.log('expired caches', expired);
-    // console.log('timestamp in microseconds since unix epoch', timestamp);
+
     res.locals.evictedExpired = {
       totalKeys: totalKeys,
       evicted: evicted,
@@ -165,9 +160,9 @@ redisController.getResponseTimes = async (req, res, next) => {
     const stats = await redisClient.info();
     const metrics = stats.split('\r\n');
     let timestamp = metrics.find((str) => str.startsWith('server_time_usec'));
-    console.log('timestamp in RT: ', timestamp);
+
     let commandsProcessed = metrics.find((str) => str.startsWith('total_commands_processed'));
-    console.log('commandsProcessed in RT: ', commandsProcessed);
+
     commandsProcessed = Number(commandsProcessed.slice(commandsProcessed.indexOf(':') + 1));
     timestamp = Number(timestamp.slice(timestamp.indexOf(':') + 1));
 
