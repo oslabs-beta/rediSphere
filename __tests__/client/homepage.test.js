@@ -5,7 +5,7 @@ import '@testing-library/jest-dom';
 
 // component to test
 // import HomePage from '../../client/components/HomePage';
-// import App from '../../client/App.jsx';
+import App from '../../client/App.jsx';
 
 xdescribe('homepage react component test', () => {
   test('Home page renders a header with the text Cache App', () => {
