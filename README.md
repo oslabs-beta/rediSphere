@@ -1,10 +1,10 @@
-# CacheApp 📈
+# rediSphere 📈
 
-CacheApp is an open source web application for visualizing Redis performance metrics in realtime dashboards. It aims to provide developers an intuitive way to gain visibility into their caching databases and quickly resolve issues.
+rediSphere is an open source web application for visualizing Redis performance metrics in realtime dashboards. It aims to provide developers an intuitive way to gain visibility into their caching databases and quickly resolve issues.
 
 ## Overview
 
-CacheApp fetches key Redis statistics every second and plots the timeseries data in customizable charts. It eliminates the need for manually parsing verbose logs and terminal outputs.
+rediSphere fetches key Redis statistics every second and plots the timeseries data in customizable charts. It eliminates the need for manually parsing verbose logs and terminal outputs.
 
 The core metrics displayed include:
 
@@ -17,7 +17,7 @@ Users can enable various combinations of charts to create dashboard views tailor
 
 ## Installation
 
-To install CacheApp:
+To install rediSphere:
 
 1. Clone the repository
 
@@ -39,15 +39,15 @@ To install CacheApp:
 
 Sessions and user accounts are stored in a MongoDB database.
 
-Credentials for accessing the Redis database to be monitored are collected from the user through CacheApp's account creation and connection flow.
+Credentials for accessing the Redis database to be monitored are collected from the user through rediSphere's account creation and connection flow.
 
-A note on security: CacheApp **HIGHLY** recommends creating a specific Redis user account restricted to read-access only for your database. The ONLY permissions necessary for the app to function is access to the INFO command, but if you supply credentials with more privileges, there's always the chance that bad actors could use the monitoring service to gain access to your cache data. Be smart, and take the extra couple minutes to create a limited-permissions account to use specifically for monitoring.
+A note on security: rediSphere **HIGHLY** recommends creating a specific Redis user account restricted to read-access only for your database. The ONLY permissions necessary for the app to function is access to the INFO command, but if you supply credentials with more privileges, there's always the chance that bad actors could use the monitoring service to gain access to your cache data. Be smart, and take the extra couple minutes to create a limited-permissions account to use specifically for monitoring.
 
 ## Dashboard & Features
 
-To start monitoring your Redis database, create a user account on the sign-in page, and provide your Redis credentials to give CacheApp access to your Redis instance.
+To start monitoring your Redis database, create a user account on the sign-in page, and provide your Redis credentials to give rediSphere access to your Redis instance.
 
-The main CacheApp dashboard displays the enabled performance charts in customizable widget boxes:
+The main rediSphere dashboard displays the enabled performance charts in customizable widget boxes:
 
 [Show Image](https://addalinktoscreenshot.com/image.png)
 
@@ -66,7 +66,7 @@ The dashboard auto-refreshes all widget charts every second with the latest perf
 
 ## Data Fetching
 
-CacheApp uses the Redis INFO command to retrieve current statistics including cache hit ratios, latency, memory usage etc.
+rediSphere uses the Redis INFO command to retrieve current statistics including cache hit ratios, latency, memory usage etc.
 
 The backend server polls the Redis INFO API every 1 second to fetch the latest performance data. It parses the returned string statistics into JSON structures and passes them to the front-end on demand.
 
@@ -78,7 +78,7 @@ By default, metrics are shown for a 2 minute trailing time window.
 
 ## Roadmap
 
-The current CacheApp MVP focuses on realtime monitoring of Redis cache performance.
+The current rediSphere MVP focuses on realtime monitoring of Redis cache performance.
 
 Future roadmap plans include:
 
@@ -93,11 +93,11 @@ Future roadmap plans include:
   - Dynamic zoom/enlargement
 - Export functionality for logged data for analysis on other platforms
 
-Community feature requests and contributions are encouraged and welcomed to expand CacheApp capabilities!
+Community feature requests and contributions are encouraged and welcomed to expand rediSphere capabilities!
 
 ## Contributing
 
-Contributions to enhance CacheApp are welcomed!
+Contributions to enhance rediSphere are welcomed!
 
 To contribute:
 
@@ -127,4 +127,4 @@ Some ways to help:
 - Improve general UI/UX
 - Expand test coverage
 
-... And anything else you have in mind! Let us know if you have any other ideas on how to enhance CacheApp!
+... And anything else you have in mind! Let us know if you have any other ideas on how to enhance rediSphere!

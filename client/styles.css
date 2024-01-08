@@ -3,7 +3,7 @@ body {
   flex-direction: column;
   align-items: center;
   margin: 0;
-  font-family: 'Chakra Petch', sans-serif;
+  font-family: monospace;
 }
 
 h2,
@@ -26,6 +26,49 @@ button:hover {
   padding: 50px;
 }
 
+.key-features-container {
+  display: flex;
+  justify-content: center;
+}
+
+.key-feature {
+  border: solid gray;
+  border-radius: 12px;
+  width: 30%;
+  margin: 15px;
+  padding: 20px;
+  box-shadow: 5px 5px 5px rgb(234, 234, 234);
+}
+
+.intro {
+  display: flex;
+  justify-content: center;
+  padding: 40px;
+
+  button {
+    font-family: inherit;
+    font-size: x-large;
+    background-color: white;
+    border-radius: 5px;
+    border: solid black;
+    height: 50px;
+    width: 200px;
+  }
+
+  button:hover {
+    transform: scale(1.03);
+    background-color: rgb(228, 228, 228);
+  }
+}
+
+.intro-left {
+  align-self: center;
+}
+#intro-logo {
+  width: 300px;
+  height: 300px;
+  margin: 0;
+}
 .login-box,
 .signup-box,
 .redis-connection-box {
@@ -49,7 +92,7 @@ button:hover {
 
   button {
     margin-top: 10px;
-    background-color: aquamarine;
+    background-color: gainsboro;
     border-radius: 5px;
   }
 
@@ -59,8 +102,8 @@ button:hover {
 }
 
 header {
-  background-color: #d3edff;
-  color: black;
+  background-color: black;
+  color: white;
   display: flex;
   justify-content: space-between;
   padding: 0 20px;
@@ -68,9 +111,14 @@ header {
 
   .header-left {
     padding-left: 40px;
-    a {
-      color: inherit;
-      text-decoration: none;
+    img {
+      width: 150px;
+      height: 150px;
+      transition: transform 1s;
+      clip-path: circle(50%);
+    }
+    img:hover {
+      transform: rotate(360deg);
     }
   }
 
@@ -109,7 +157,7 @@ header {
     box-sizing: border-box;
     border: 1px solid gray;
     border-radius: 20px;
-    background-color: rgb(255, 253, 253);
+    background-color: rgb(251, 251, 251);
     display: flex;
     flex-direction: column;
     align-items: center;
