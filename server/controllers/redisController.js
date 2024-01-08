@@ -2,28 +2,18 @@ const { createClient } = require('redis');
 const User = require('../models/userModel');
 const redisController = {};
 
-//close redis connection
-//prevent ERR max number of clients reached
-redisController.disconnectRedis = async (req, res, next) => {
-  try {
-    req.redisClient.disconnect();
-    // console.log('Redis disconnected!');
-    return next();
-  } catch (err) {
-    return next({
-      log: `redisController.disconnectRedis error: ${err}`,
-      message: 'could not disconnect Redis client',
-      status: 500,
-    });
-  }
-};
-
 //connect to user's redis instance stored in user database
+
+//consider having one persistent connection vs creating and closing a connection for each route?
+//or one connection that opens and closes, but fetches data for each route during the one fetch
 redisController.connectUserRedis = async (req, res, next) => {
   try {
     const userID = req.cookies.ssid;
     const user = await User.findById(userID);
     const { host, port, redisPassword } = user;
+    //consider refactor to support either/or for local vs cloud vs API key vs certificate
+    //if we just assemble the URI it may be possible to be cloud/local agnostic
+    //ie jsut redisURL for both and maybe API if API key is passed as password
     const redisClient = createClient({
       password: redisPassword,
       socket: {
@@ -31,6 +21,7 @@ redisController.connectUserRedis = async (req, res, next) => {
         port,
       },
     });
+    //does the client need to be *connected* yet?
     await redisClient.connect();
     // console.log(`Connected to Redis Server: ${host} on port ${port}`);
     req.redisClient = redisClient;
@@ -44,24 +35,63 @@ redisController.connectUserRedis = async (req, res, next) => {
   }
 };
 
+//close redis connection
+//prevent ERR max number of clients reached
+redisController.disconnectRedis = async (req, res, next) => {
+  try {
+    //what's better disconnect() or quit() or end()? disconnect shows up in
+    //redis-node github docs, but nowhere else
+    //https://github.com/redis/node-redis/blob/5a96058c2f77c1278a0438ca5923f0772cf74790/packages/client/lib/client/index.ts#L845
+    //or the readme.md
+    //quit() is a more "graceful" quit -- executing any remaining commands in queue before closing
+    //disconnect() ends immediately, and any pending replies are lost
+    //does this need an await? disconnect() returns a promise;
+    //added an await below, performs the same, probably "better" overall
+    await req.redisClient.disconnect();
+    // console.log('Redis disconnected!');
+    return next();
+  } catch (err) {
+    return next({
+      log: `redisController.disconnectRedis error: ${err}`,
+      message: 'could not disconnect Redis client',
+      status: 500,
+    });
+  }
+};
+
 //efficiency of cache usage metric
+
+//TODO:
+//refactor various gets to all one pull from redis
+//redisController.getAllStats
+//redisController.parse[StatName]
+//then specific middlewares to parse the pulled data into individual stats
+
+//we parse
 redisController.getCacheHitsRatio = async (req, res, next) => {
   try {
     //store Redis client from middleware
     const redisClient = req.redisClient;
-    //connect to local redis instannce
-    // await redisClient.connect();
-    // //set one key to get *some* data to see the performance on
-    // await redisClient.set('test', 'hello');
-    //response is a giant array of comma and newline separated values, with sections delinated by '# <SectionHeader>',
+
+    //can use .info('all') to pull all sections and not just default sections
+    //would include CommandStats that isn't included in default
     const stats = await redisClient.info();
+    //response is a giant array of comma and newline separated values, with sections delinated by '# <SectionHeader>',
+
     //separate string into individual metrics and store in array
     const metrics = stats.split('\r\n');
 
+    console.log(metrics);
+    //every line in stats becomes its own element in the array
     let cacheHits = metrics.find((str) => str.startsWith('keyspace_hits'));
+    // '#Stats
+    // keyspace_hits: 1007'
     let cacheMisses = metrics.find((str) => str.startsWith('keyspace_misses'));
     let timestamp = metrics.find((str) => str.startsWith('server_time_usec'));
 
+    //consider adding validation in case any of the stats aren't present in the stats returned
+
+    //cacheHits will look like 'keyspace_hits : 1007'
     cacheHits = Number(cacheHits.slice(cacheHits.indexOf(':') + 1));
     cacheMisses = Number(cacheMisses.slice(cacheMisses.indexOf(':') + 1));
     timestamp = Number(timestamp.slice(timestamp.indexOf(':') + 1));
@@ -135,12 +165,20 @@ redisController.getResponseTimes = async (req, res, next) => {
     const stats = await redisClient.info();
     const metrics = stats.split('\r\n');
     let timestamp = metrics.find((str) => str.startsWith('server_time_usec'));
+    console.log('timestamp in RT: ', timestamp);
     let commandsProcessed = metrics.find((str) => str.startsWith('total_commands_processed'));
+    console.log('commandsProcessed in RT: ', commandsProcessed);
     commandsProcessed = Number(commandsProcessed.slice(commandsProcessed.indexOf(':') + 1));
     timestamp = Number(timestamp.slice(timestamp.indexOf(':') + 1));
+
+    //could just do one call to info() as info('all') to get both info and commandStats
     const cmdstats = await redisClient.info('commandstats');
+    //console.log('cmdstat in RT: ', cmdstats);
+
     const cmdmetrics = cmdstats.split('\r\n');
+    //console.log('cmdmetrics: ', cmdmetrics);
     let avgGetCacheTime = cmdmetrics.find((str) => str.startsWith('cmdstat_get'));
+    //console.log('avgGetCacheTime in RT: ', avgGetCacheTime);
     let totalGet = avgGetCacheTime;
     // console.log('*******', avgGetCacheTime);
     // time is in microseconds
