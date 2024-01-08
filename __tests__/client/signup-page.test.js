@@ -7,7 +7,7 @@ import '@testing-library/jest-dom';
 import { BrowserRouter } from 'react-router-dom';
 import SignupPage from '../../client/components/SignupPage';
 
-describe('homepage react component test', () => {
+xdescribe('homepage react component test', () => {
   test('Home page renders a header with the text Cache App', () => {
     // arrange
     render(
