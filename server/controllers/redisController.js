@@ -1,6 +1,7 @@
 const { createClient } = require('redis');
 const User = require('../models/userModel');
 const redisController = {};
+require('dotenv').config();
 
 //connect to user's redis instance stored in user database
 
@@ -16,14 +17,17 @@ redisController.connectUserRedis = async (req, res, next) => {
     //ie jsut redisURL for both and maybe API if API key is passed as password
     const redisClient = createClient({
       password: redisPassword,
+      //password: process.env.REDIS_API;
       socket: {
         host,
         port,
       },
     });
-    const redisClient = createClient({
-      url: `redis://redis-18340.c323.us-east-1-2.ec2.cloud.redislabs.com'
-    });
+    // const redisURL = `redis://${redisPassword}@${host}:${port}`;
+    // const redisClient = createClient({
+    //   url: `redis://${process.env.REDIS_API}@${host}:${port}`;
+    //   //url: redisURL
+    // });
     //does the client need to be *connected* yet?
     await redisClient.connect();
     await redisClient.on('ready', () => console.log('server_info:', redisClient.server_info));
