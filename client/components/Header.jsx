@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import blackLogo from '../assets/black-background-redisphere-logo.png';
 
 const Header = () => {
   const [buttons, setButtons] = useState([]);
@@ -57,11 +57,10 @@ const Header = () => {
     <header>
       <div className="header-left">
         <a href="/">
-          <h1>Cache App</h1>
+          <img src={blackLogo}></img>
         </a>
       </div>
       <div className="header-right">
-        <button>about</button>
         <button onClick={() => navigate('/contact')}>contact</button>
         {buttons}
       </div>
