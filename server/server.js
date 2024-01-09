@@ -11,7 +11,7 @@ const mongoose = require('mongoose');
 const apiRouter = require('./routes/api.js');
 const authRouter = require('./routes/authRouter.js');
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || '3000';
 
 const app = express();
 
@@ -20,14 +20,14 @@ app.use(cookieParser());
 app.use(express.json()); // parses body EXCEPT html
 app.use(express.urlencoded({ extended: true })); // requires header to parse
 
-if (process.env.NODE_ENV === 'production') {
-  // statically serve everything in the build folder on the route '/build'
-  app.use('/build', express.static(path.join(__dirname, '../build')));
-  // serve index.html on the route '/'
-  app.get('/', (req, res) => {
-    return res.status(200).sendFile(path.join(__dirname, '../index.html'));
-  });
-}
+// if (process.env.NODE_ENV === 'production') {
+// statically serve everything in the build folder on the route '/build'
+app.use('/build', express.static(path.join(__dirname, '../build')));
+// serve index.html on the route '/'
+app.get('/', (req, res) => {
+  return res.status(200).sendFile(path.join(__dirname, '../index.html'));
+});
+// }
 
 //mounting api router, redis metrics middlewares
 app.use('/api', apiRouter);
