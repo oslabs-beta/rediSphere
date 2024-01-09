@@ -4,6 +4,10 @@ WORKDIR /usr/src/app
 
 COPY . .
 
+ENV PORT=3000
+
+ENV MONGO_URI=mongodb+srv://restankowitz:1234@cluster0.mvwl90e.mongodb.net/?retryWrites=true&w=majority
+
 RUN npm install
 
 RUN npm run build
