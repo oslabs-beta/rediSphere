@@ -102,14 +102,8 @@ function runCacheFill(client) {
   //while memory used < 30MB
   //set more keys
 
-<<<<<<< HEAD
-  for (let i = 0; i < 50; i++) {
-    client.setEx(`${i}`, 120, generateRandomValue(1000000));
-    client.get(`${i}`);
-=======
   for (let i = 1; i < 30; i++) {
     client.setEx(`${i}`, 15, generateRandomValue(1000000));
->>>>>>> de0bf9a6c4962e003a1ea314fbc1977cce7e684c
   }
 }
 
