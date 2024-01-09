@@ -1,6 +1,6 @@
 const request = require('supertest');
 //const assert = require('assert');
-const server = `http://localhost:${process.env.PORT}`;
+const server = `http://localhost:3000`;
 
 describe('testing api endpoint', function () {
   test('get:/api/memory', function () {
