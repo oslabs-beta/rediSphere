@@ -7,12 +7,8 @@ services:
     ports:
       - '3000:3000'
     volumes:
-      - .:/usr/src/app
-      - node_modules:/usr/src/app/node_modules
+      - /usr/src/app
     environment:
       - MONGO_URI=mongodb+srv://restankowitz:1234@cluster0.mvwl90e.mongodb.net/?retryWrites=true&w=majority
       - NODE_ENV=production
     command: npm run start
-
-volumes:
-  node_modules:
