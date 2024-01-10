@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-// import { SET_USER } from '../dashboardReducer.js';
+import { LOGIN_USER } from '../dashboardReducer.js';
 import { useDispatch } from 'react-redux';
 
 import Footer from './Footer.jsx';
@@ -22,14 +22,14 @@ const LoginPage = () => {
 
     if (result === 'not ok') return alert('login failed. try again.');
     if (result === 'ok') {
-      // dispatch(SET_USER(data.username));
+      dispatch(LOGIN_USER());
       return navigate('/dashboard');
     }
   };
 
   return (
-    <div>
-      <h2>{'Sign in to Cache App'}</h2>
+    <div id="sign-in-page">
+      <h2>{'Sign in view your dashboard'}</h2>
 
       <div className="login-box">
         <div>
@@ -53,7 +53,7 @@ const LoginPage = () => {
       </div>
 
       <div>
-        {'New to Cache App? '}
+        {'New to rediSphere? '}
         <a href="/signup">Create an account</a>
       </div>
 

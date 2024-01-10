@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import blackLogo from '../assets/black-background-redisphere-logo.png';
+
+import { LOGIN_USER, LOGOUT_USER } from '../dashboardReducer.js';
 
 const Header = () => {
   const [buttons, setButtons] = useState([]);
+  const dispatch = useDispatch();
 
   //delete active session in db and delete ssid cookie
   //navigate back to homepage
@@ -29,6 +33,7 @@ const Header = () => {
             <button onClick={() => navigate('/signup')}>sign up</button>
           </div>,
         ]);
+        dispatch(LOGOUT_USER());
         return navigate('/');
       } else if (activeSession.session === true) {
         setButtons([
@@ -42,6 +47,7 @@ const Header = () => {
             </button>
           </div>,
         ]);
+        dispatch(LOGIN_USER());
       }
     } catch (err) {
       return console.log(err);

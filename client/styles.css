@@ -32,7 +32,8 @@ button:hover {
 }
 
 .key-feature {
-  border: solid gray;
+  border: solid gainsboro;
+  border-width: 1px;
   border-radius: 12px;
   width: 30%;
   margin: 15px;
@@ -42,12 +43,12 @@ button:hover {
 
 .intro {
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   padding: 40px;
 
   button {
     font-family: inherit;
-    font-size: x-large;
+    font-size: large;
     background-color: white;
     border-radius: 5px;
     border: solid black;
@@ -60,14 +61,25 @@ button:hover {
     background-color: rgb(228, 228, 228);
   }
 }
-
 .intro-left {
-  align-self: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+#demo-gif {
+  flex: 0 0 auto;
+  height: 500px;
+  width: 750px;
 }
 #intro-logo {
-  width: 300px;
-  height: 300px;
-  margin: 0;
+  width: 400px;
+  height: 400px;
+  margin: -50px;
+}
+
+#sign-in-page,
+#sign-up-page {
+  margin-top: 50%;
 }
 .login-box,
 .signup-box,
@@ -75,7 +87,7 @@ button:hover {
   width: 300px;
   display: flex;
   flex-direction: column;
-  background-color: aliceblue;
+  background-color: rgb(246, 246, 246);
   padding: 40px;
   border-radius: 10px;
   margin-bottom: 20px;
@@ -92,12 +104,13 @@ button:hover {
 
   button {
     margin-top: 10px;
-    background-color: gainsboro;
+    background-color: black;
+    color: white;
     border-radius: 5px;
   }
 
   button:hover {
-    transform: scaleY(1.05);
+    transform: scaleY(1.1);
   }
 }
 
@@ -187,8 +200,6 @@ header {
   }
 
   .small {
-    /* height: 150px;
-    width: 150px; */
     grid-column: span 1;
     grid-row: span 1;
     align-items: flex-start;
@@ -196,15 +207,11 @@ header {
   }
 
   .medium {
-    /* height: 300px;
-    width: 300px; */
     grid-column: span 2;
     grid-row: span 2;
   }
 
   .large {
-    /* height: 450px;
-    width: 600px; */
     grid-column: span 4;
     grid-row: span 3;
   }
@@ -254,12 +261,12 @@ svg {
   left: 50%;
   top: 50%;
   position: fixed;
-  background-color: aliceblue;
-  font-size: 20px;
+  background-color: rgb(199, 199, 199);
+  font-size: x-large;
   transform: scale(0);
   transition: 200ms ease-in-out;
   border-radius: 10px;
-  padding: 20px;
+  padding: 30px;
 
   display: flex;
   flex-direction: column;
@@ -294,7 +301,7 @@ svg {
     }
   }
   button:hover {
-    border: solid gray;
+    border: solid black;
   }
 }
 
