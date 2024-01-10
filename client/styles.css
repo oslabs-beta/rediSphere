@@ -15,20 +15,52 @@ button:hover {
   cursor: pointer;
 }
 
-.home-page {
+.home-page,
+.contact-page {
   width: 100vw;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.main-content {
+.contact-info-content {
+  display: flex;
+  flex-wrap: wrap;
   padding: 50px;
+  justify-content: center;
+
+  div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 25px;
+  }
+  img {
+    clip-path: circle(50%);
+    width: 220px;
+  }
+  p {
+    margin-top: 0;
+    font-size: large;
+  }
+}
+.contact-links {
+  a {
+    img {
+      width: 30px;
+    }
+    margin: 8px;
+  }
+  img:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+  }
 }
 
 .key-features-container {
   display: flex;
   justify-content: center;
+  padding: 0 20px;
 }
 
 .key-feature {
@@ -37,8 +69,9 @@ button:hover {
   border-radius: 12px;
   width: 30%;
   margin: 15px;
-  padding: 20px;
+  padding: 40px;
   box-shadow: 5px 5px 5px rgb(234, 234, 234);
+  font-size: large;
 }
 
 .intro {
@@ -65,6 +98,7 @@ button:hover {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  padding: 30px;
 }
 #demo-gif {
   flex: 0 0 auto;
@@ -79,7 +113,8 @@ button:hover {
 
 #sign-in-page,
 #sign-up-page {
-  margin-top: 50%;
+  margin-top: 20%;
+  font-size: large;
 }
 .login-box,
 .signup-box,
@@ -91,6 +126,7 @@ button:hover {
   padding: 40px;
   border-radius: 10px;
   margin-bottom: 20px;
+  font-size: large;
 
   input,
   button {
@@ -98,6 +134,7 @@ button:hover {
     padding: 0;
     height: 25px;
     font-family: inherit;
+    font-size: inherit;
     border: none;
     margin-bottom: 10px;
   }
@@ -345,12 +382,10 @@ svg {
 
 footer {
   margin: 20px auto;
-  /* position: fixed;
-  bottom: 1vh; */
+  font-size: large;
   .github-logo {
-    margin-left: 10px;
-    height: 20px;
-    width: 20px;
+    margin: 0 10px -6px 0;
+    height: 25px;
     transition: transform 0.3s ease-in-out;
   }
   .github-logo:hover {

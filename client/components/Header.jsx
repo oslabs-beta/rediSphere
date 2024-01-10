@@ -34,7 +34,6 @@ const Header = () => {
           </div>,
         ]);
         dispatch(LOGOUT_USER());
-        return navigate('/');
       } else if (activeSession.session === true) {
         setButtons([
           <div key={'b'}>

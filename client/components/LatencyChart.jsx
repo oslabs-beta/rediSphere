@@ -106,13 +106,11 @@ const Chart = ({
         <g>
           {formattedData.map((d, i) => (
             <rect
-              //   fill={getRandomColor()}
-              fill="steelblue"
+              fill="lightgreen"
               fillOpacity={0.5}
               key={i}
               x={x(d.timestamp)}
               y={y(d.avgGetCacheTime)}
-              //   width={(width - marginLeft - marginRight) / formattedData.length}
               width={'5px'}
               height={height - marginBottom - y(d.avgGetCacheTime)}
             />
