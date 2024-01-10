@@ -1,5 +1,4 @@
 const request = require('supertest');
-//const assert = require('assert');
 const server = `http://localhost:3000`;
 
 describe('testing api endpoint', function () {

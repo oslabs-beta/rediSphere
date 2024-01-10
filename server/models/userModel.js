@@ -14,8 +14,9 @@ const userSchema = new Schema({
     default: [
       //consider which defaults we want in prod
       ['large', 'hitmiss'],
+      ['large', 'evictedExpired'],
+      ['medium', 'latency'],
       ['small', 'memory'],
-      ['medium', 'hitmiss'],
     ],
   },
 });
@@ -31,7 +32,6 @@ userSchema.pre('save', async function () {
     if (!this.isModified('password')) return;
     //create a hash of the updated password
     const hash = await bcrypt.hash(this.password, SALT_WORK_FACTOR);
-
     //modify the request to store the hashed password instead of in plaintext
     this.password = hash;
     return;
@@ -41,10 +41,7 @@ userSchema.pre('save', async function () {
 });
 
 // comparePassword method on the user schema to check if the provided Password matches the hashed Password
-
-//update to work w/RedisPassword field
 userSchema.methods.comparePassword = function (providedPassword) {
-  //do we need to specify the SALT_WORK_FACTOR for bcypt.compare()?
   const isMatch = bcrypt.compare(providedPassword, this.password);
   return isMatch;
 };

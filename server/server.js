@@ -1,8 +1,4 @@
-//consider refactor to import
-
 const express = require('express');
-//import 'express-async-errors'
-//const cors = require('cors');
 require('dotenv').config();
 const path = require('path');
 const cookieParser = require('cookie-parser');

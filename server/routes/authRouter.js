@@ -16,7 +16,6 @@ router.delete('/delete-widget/:index', userController.deleteWidget, (req, res) =
 );
 
 // post req to sign up, once signed up, redirect to dashboard
-// consider renaming to /signup
 router.post(
   '/create',
   userController.createUser,
@@ -43,7 +42,6 @@ router.put('/connect-redis', userController.addRedisCredentials, (req, res) =>
 router.get('/session', sessionController.isLoggedIn, (req, res) => res.json(res.locals));
 
 //log out
-//delete because deletes sessionID?
 router.delete('/signout', sessionController.logOut, (req, res) => {
   return res.json(res.locals.loggedOut);
 });
