@@ -6,6 +6,4 @@ npm-debug.log
 package-lock.json
 dump.rdb
 build/
-
-# zip file for aws deployment
 *.zip
