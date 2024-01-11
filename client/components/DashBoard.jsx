@@ -64,7 +64,7 @@ const DashBoard = () => {
       <div className="widget-container">{widgetDisplay}</div>
       <div id="dashboard-buttons">
         <button id="edit-redis-info-button" onClick={() => navigate('/connectredis')}>
-          📎
+          ✏️
         </button>
         <button
           id="add-widget-button"

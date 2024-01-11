@@ -32,7 +32,7 @@ userController.deleteWidget = async (req, res, next) => {
     return next();
   } catch (err) {
     return next({
-      log: 'userController deleteWidgets error',
+      log: `userController deleteWidgets error: ${err}`,
       message: 'could not delete widget',
       status: 500,
     });
