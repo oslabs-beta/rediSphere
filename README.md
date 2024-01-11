@@ -1,6 +1,8 @@
-# rediSphere 📈
+![rediSphere banner](</client/assets/redisphere_banner%20(1).png>)
 
-rediSphere is an open source web application for visualizing Redis performance metrics in realtime dashboards. It aims to provide developers an intuitive way to gain visibility into their caching databases and quickly resolve issues.
+# rediSphere 🔮
+
+[rediSphere](http://redisphere.com) is an open source web application for visualizing Redis performance metrics in realtime dashboards. It aims to provide developers an intuitive way to gain visibility into their caching databases and quickly resolve issues.
 
 ## Overview
 
@@ -49,7 +51,7 @@ To start monitoring your Redis database, create a user account on the sign-in pa
 
 The main rediSphere dashboard displays the enabled performance charts in customizable widget boxes:
 
-[Show Image](https://addalinktoscreenshot.com/image.png)
+![Dashboard demo animation showing customizable widgets](client/assets/demo2.gif)
 
 By clicking the plus button, you can add widgets for varying metrics.
 

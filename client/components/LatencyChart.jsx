@@ -80,7 +80,11 @@ const Chart = ({
           className="chart-label"
           transform={`translate(-15,${(height - marginBottom) / 2 + 100}) rotate(-90)`}
         >
+<<<<<<< HEAD
           {'Avg. Response Time (µs)'}
+=======
+          {'Avg. Response Time (μs)'}
+>>>>>>> d09b740e7e10861319b441240f0d4d7ded279297
         </text>
         <text
           className="chart-label"

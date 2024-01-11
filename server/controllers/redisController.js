@@ -105,21 +105,25 @@ redisController.getResponseTimes = async (req, res, next) => {
     const redisClient = req.redisClient;
     const stats = await redisClient.info();
     const metrics = stats.split('\r\n');
-    console.log(metrics);
+
     let timestamp = metrics.find((str) => str.startsWith('server_time_usec'));
+    timestamp = Number(timestamp.slice(timestamp.indexOf(':') + 1));
+
     let commandsProcessed = metrics.find((str) => str.startsWith('total_commands_processed'));
     commandsProcessed = Number(commandsProcessed.slice(commandsProcessed.indexOf(':') + 1));
-    timestamp = Number(timestamp.slice(timestamp.indexOf(':') + 1));
+
     const cmdstats = await redisClient.info('commandstats');
     const cmdmetrics = cmdstats.split('\r\n');
+
     let avgGetCacheTime = cmdmetrics.find((str) => str.startsWith('cmdstat_get'));
     let totalGet = avgGetCacheTime;
+
     if (avgGetCacheTime)
       avgGetCacheTime = Number(
         avgGetCacheTime.slice(avgGetCacheTime.indexOf('usec_per_call=') + 14),
       );
     if (totalGet)
-      totalGet = Number(totalGet.slice(totalGet.indexOf('calls=') + 6, totalGet.indexOf(','))) || 0;
+      totalGet = Number(totalGet.slice(totalGet.indexOf('calls=') + 6, totalGet.indexOf(',')) || 0);
     res.locals.latency = {
       commandsProcessed: commandsProcessed,
       totalGet: totalGet,
@@ -145,10 +149,12 @@ redisController.getMemory = async (req, res, next) => {
     let usedMemory = metrics.find((str) => str.startsWith('used_memory_human'));
     let peakUsedMemory = metrics.find((str) => str.startsWith('used_memory_peak_human'));
     let totalMemory = metrics.find((str) => str.startsWith('total_system_memory_human'));
-    usedMemory = Number(usedMemory.slice(usedMemory.indexOf(':') + 1, usedMemory.length - 1));
-    peakUsedMemory = Number(
-      peakUsedMemory.slice(peakUsedMemory.indexOf(':') + 1, peakUsedMemory.length - 1),
-    );
+    if (usedMemory)
+      usedMemory = Number(usedMemory.slice(usedMemory.indexOf(':') + 1, usedMemory.length - 1));
+    if (peakUsedMemory)
+      peakUsedMemory = Number(
+        peakUsedMemory.slice(peakUsedMemory.indexOf(':') + 1, peakUsedMemory.length - 1),
+      );
     res.locals.memory = {
       usedMemory: usedMemory,
       peakUsedMemory: peakUsedMemory,
