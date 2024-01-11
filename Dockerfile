@@ -4,6 +4,10 @@ WORKDIR /usr/src/app
 
 COPY . .
 
+ENV PORT=3000
+
+ENV MONGO_URI=[YOUR URI HERE]
+
 RUN npm install
 
 RUN npm run build

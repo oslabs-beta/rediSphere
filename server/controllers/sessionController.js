@@ -32,7 +32,6 @@ sessionController.startSession = async (req, res, next) => {
   const username = res.locals.username;
   console.log(res.locals);
   try {
-    //TODO: just do the create() without assigning to a variable
     const session = await Session.create({ cookieId: id, username });
     return next();
   } catch (err) {

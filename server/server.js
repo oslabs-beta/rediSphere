@@ -1,8 +1,4 @@
-//consider refactor to import
-
 const express = require('express');
-//import 'express-async-errors'
-//const cors = require('cors');
 require('dotenv').config();
 const path = require('path');
 const cookieParser = require('cookie-parser');
@@ -20,18 +16,18 @@ app.use(cookieParser());
 app.use(express.json()); // parses body EXCEPT html
 app.use(express.urlencoded({ extended: true })); // requires header to parse
 
-// if (process.env.NODE_ENV === 'production') {
-// statically serve everything in the build folder on the route '/build'
-app.use('/build', express.static(path.join(__dirname, '../build')));
-// serve index.html on the route '/'
-app.get('/', (req, res) => {
-  return res.status(200).sendFile(path.join(__dirname, '../index.html'));
-});
-// }
-
 //mounting api router, redis metrics middlewares
 app.use('/api', apiRouter);
 app.use('/users', authRouter);
+
+if (process.env.NODE_ENV === 'production') {
+  // statically serve everything in the build folder on the route '/build'
+  app.use('/build', express.static(path.join(__dirname, '../build')));
+  // serve index.html on the route '/'
+  app.get('/*', (req, res) => {
+    return res.status(200).sendFile(path.join(__dirname, '../index.html'));
+  });
+}
 
 // catch-all route handler for any requests to an unknown route
 app.use((req, res) => res.status(404).send("This is not the page you're looking for..."));

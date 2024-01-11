@@ -1,12 +1,6 @@
-//api.js
-
-//potentially rename to apiRouter for consistency
-
 const express = require('express');
 const redisController = require('../controllers/redisController');
 const router = express.Router();
-
-// could set up the requests from the frontend to include an API key / token in the header of the request
 
 //sends cachehitratio to the front
 router.get(

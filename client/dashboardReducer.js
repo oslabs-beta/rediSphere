@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   widgetArray: [],
+  loggedIn: false,
 };
 
 const dashboardSlice = createSlice({
@@ -14,8 +15,14 @@ const dashboardSlice = createSlice({
       widgets.forEach((el) => newArray.push(el));
       state.widgetArray = newArray;
     },
+    LOGIN_USER: (state) => {
+      state.loggedIn = true;
+    },
+    LOGOUT_USER: (state) => {
+      state.loggedIn = false;
+    },
   },
 });
 
-export const { SET_USER, SET_WIDGETS } = dashboardSlice.actions;
+export const { LOGIN_USER, LOGOUT_USER, SET_WIDGETS } = dashboardSlice.actions;
 export default dashboardSlice.reducer;

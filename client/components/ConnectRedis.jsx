@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import Footer from './Footer';
 
 const ConnectRedisPage = () => {
   const navigate = useNavigate();
@@ -9,7 +10,6 @@ const ConnectRedisPage = () => {
       data.host = document.getElementById('host').value;
       data.port = document.getElementById('port').value;
       data.redisPassword = document.getElementById('redis-password').value;
-      // console.log(data);
       const response = await fetch('/users/connect-redis', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -24,11 +24,10 @@ const ConnectRedisPage = () => {
   };
 
   return (
-    <div>
-      <h2>{'Success!'}</h2>
+    <div id="redis-connection-page">
+      <h3>{'Connect to your Redis instance'}</h3>
       <div className="redis-connection-box">
-        <h4>{'Just one more step. Please enter your Redis instance information.'}</h4>
-
+        <h4>{'Please enter your Redis instance information.'}</h4>
         <div>
           <div>
             <label>
@@ -55,6 +54,7 @@ const ConnectRedisPage = () => {
         </div>
       </div>
       <a href="/dashboard">Skip this step for now</a>
+      <Footer />
     </div>
   );
 };
