@@ -6,7 +6,7 @@ COPY . .
 
 ENV PORT=3000
 
-ENV MONGO_URI=mongodb+srv://restankowitz:1234@cluster0.mvwl90e.mongodb.net/?retryWrites=true&w=majority
+ENV MONGO_URI=[YOUR URI HERE]
 
 RUN npm install
 
