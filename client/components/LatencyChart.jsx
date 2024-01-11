@@ -57,17 +57,17 @@ const Chart = ({
     .range([marginLeft, width - marginRight]);
   const y = d3
     .scaleLinear()
-    .domain([0, d3.max(formattedData, (d) => d.avgGetCacheTime) + 1])
+    .domain([0, d3.max(formattedData, (d) => d.avgGetCacheTime || 0) + 1])
     .range([height - marginBottom, marginTop]);
   const yLine = d3
     .scaleLinear()
-    .domain(d3.extent(formattedData, (d) => d.totalGet))
+    .domain(d3.extent(formattedData, (d) => d.totalGet || 0))
     .range([height - marginBottom, marginTop]);
 
   const line = d3
     .line()
     .x((d) => x(d.timestamp))
-    .y((d) => yLine(d.totalGet));
+    .y((d) => yLine(d.totalGet || 0));
 
   useEffect(() => void d3.select(gx.current).call(d3.axisBottom(x)), [gx, x]);
   useEffect(() => void d3.select(gy.current).call(d3.axisLeft(y)), [gy, y]);
@@ -80,11 +80,7 @@ const Chart = ({
           className="chart-label"
           transform={`translate(-15,${(height - marginBottom) / 2 + 100}) rotate(-90)`}
         >
-<<<<<<< HEAD
-          {'Avg. Response Time (µs)'}
-=======
           {'Avg. Response Time (μs)'}
->>>>>>> d09b740e7e10861319b441240f0d4d7ded279297
         </text>
         <text
           className="chart-label"
@@ -104,7 +100,7 @@ const Chart = ({
         <path fill="none" stroke="black" strokeWidth="1.5" d={line(formattedData)} />
         <g fill="none" stroke="black" strokeWidth="1.5">
           {formattedData.map((d, i) => (
-            <circle key={i} cx={x(d.timestamp)} cy={yLine(d.totalGet)} r=".75" />
+            <circle key={i} cx={x(d.timestamp)} cy={yLine(d.totalGet || 0)} r=".75" />
           ))}
         </g>
         <g>
@@ -114,9 +110,9 @@ const Chart = ({
               fillOpacity={0.5}
               key={i}
               x={x(d.timestamp)}
-              y={y(d.avgGetCacheTime)}
+              y={y(d.avgGetCacheTime || 0)}
               width={'5px'}
-              height={height - marginBottom - y(d.avgGetCacheTime)}
+              height={height - marginBottom - y(d.avgGetCacheTime || 0)}
             />
           ))}
         </g>
