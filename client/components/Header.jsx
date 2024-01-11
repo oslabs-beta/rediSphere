@@ -17,7 +17,10 @@ const Header = () => {
       method: 'DELETE',
     });
     const result = await response.json();
-    if (result === true) return navigate('/');
+    if (result === true) {
+      dispatch(LOGOUT_USER());
+      return navigate('/');
+    }
     return;
   };
 

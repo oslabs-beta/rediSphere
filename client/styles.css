@@ -112,7 +112,8 @@ button:hover {
 }
 
 #sign-in-page,
-#sign-up-page {
+#sign-up-page,
+#redis-connection-page {
   margin-top: 20%;
   font-size: large;
 }
@@ -273,22 +274,33 @@ svg {
 .memory-chart {
   margin: 0;
 }
-#add-widget-button {
+
+#dashboard-buttons {
   position: fixed;
-  bottom: 3vh;
-  right: 3vw;
-  height: 50px;
-  width: 50px;
-  font-size: xx-large;
-  border-radius: 50px;
-  border: none;
-  background-color: greenyellow;
-  color: white;
-  opacity: 0.5;
+  bottom: 5vh;
+  right: 5vw;
+
+  button {
+    margin: 8px;
+    height: 50px;
+    width: 50px;
+    font-size: xx-large;
+    border-radius: 50px;
+    border: none;
+    opacity: 0.7;
+  }
+  button:hover {
+    transform: scale(1.08);
+    opacity: 1;
+  }
 }
-#add-widget-button:hover {
-  transform: scale(1.08);
-  opacity: 1;
+
+#edit-redis-info-button {
+  background-color: black;
+}
+#add-widget-button {
+  background-color: lightgreen;
+  color: white;
 }
 
 .modal {
