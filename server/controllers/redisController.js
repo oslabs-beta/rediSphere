@@ -105,6 +105,7 @@ redisController.getResponseTimes = async (req, res, next) => {
     const redisClient = req.redisClient;
     const stats = await redisClient.info();
     const metrics = stats.split('\r\n');
+    console.log(metrics);
     let timestamp = metrics.find((str) => str.startsWith('server_time_usec'));
     let commandsProcessed = metrics.find((str) => str.startsWith('total_commands_processed'));
     commandsProcessed = Number(commandsProcessed.slice(commandsProcessed.indexOf(':') + 1));
@@ -113,8 +114,12 @@ redisController.getResponseTimes = async (req, res, next) => {
     const cmdmetrics = cmdstats.split('\r\n');
     let avgGetCacheTime = cmdmetrics.find((str) => str.startsWith('cmdstat_get'));
     let totalGet = avgGetCacheTime;
-    avgGetCacheTime = Number(avgGetCacheTime.slice(avgGetCacheTime.indexOf('usec_per_call=') + 14));
-    totalGet = Number(totalGet.slice(totalGet.indexOf('calls=') + 6, totalGet.indexOf(',')));
+    if (avgGetCacheTime)
+      avgGetCacheTime = Number(
+        avgGetCacheTime.slice(avgGetCacheTime.indexOf('usec_per_call=') + 14),
+      );
+    if (totalGet)
+      totalGet = Number(totalGet.slice(totalGet.indexOf('calls=') + 6, totalGet.indexOf(','))) || 0;
     res.locals.latency = {
       commandsProcessed: commandsProcessed,
       totalGet: totalGet,
