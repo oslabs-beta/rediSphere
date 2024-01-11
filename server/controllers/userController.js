@@ -8,7 +8,6 @@ userController.getWidgets = async (req, res, next) => {
     const id = req.cookies.ssid;
     const user = await User.findById(id);
     res.locals.widgets = user.widgets;
-    // console.log(user.widgets);
     return next();
   } catch (err) {
     return next({
@@ -28,13 +27,12 @@ userController.deleteWidget = async (req, res, next) => {
     const newWidgets = user.widgets
       .slice(0, indexToDelete)
       .concat(user.widgets.slice(indexToDelete + 1));
-    //$set update aggregator operator in mongoDB
     await user.updateOne({ $set: { widgets: newWidgets } });
     res.locals.widgets = newWidgets;
     return next();
   } catch (err) {
     return next({
-      log: 'userController deleteWidgets error',
+      log: `userController deleteWidgets error: ${err}`,
       message: 'could not delete widget',
       status: 500,
     });
@@ -54,7 +52,6 @@ userController.addWidget = async (req, res, next) => {
       { new: true },
     );
     res.locals.widgets = update.widgets;
-    // console.log(update.widgets);
     return next();
   } catch (err) {
     return next({
@@ -70,9 +67,6 @@ userController.addRedisCredentials = async (req, res, next) => {
   const { host, port, redisPassword } = req.body;
   try {
     const id = req.cookies.ssid;
-    //can we do the update w/o storing it in update? update not referenced after
-    //could do findByIdAndUpdate like in previous middleware
-    //update vs set to be future-proof for updating id's is good; may need to refactor to $push for when we have multiple Redis connection
     await User.findByIdAndUpdate(id, { $set: { host, port, redisPassword } });
     res.locals.message = 'ok';
     return next();
@@ -122,7 +116,6 @@ userController.verifyUser = async (req, res, next) => {
     if (userExists) {
       //if so, bcrypt compare password with stored hashed password
       const passwordMatch = await userExists.comparePassword(password);
-      //if username and password match, good to go
       if (passwordMatch) {
         res.locals.message = 'ok';
         res.locals.userID = userExists.id;

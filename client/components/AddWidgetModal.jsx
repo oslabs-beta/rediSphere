@@ -27,7 +27,7 @@ const buttonIcons = {
 const nameMap = {
   hitmiss: 'Cache Hit/Miss Ratio',
   memory: 'Memory Usage',
-  evictedExpired: 'No. Eviction/Expiration',
+  evictedExpired: 'Evicted/Expired',
   latency: 'Av. Response Time',
 };
 
@@ -74,9 +74,9 @@ const Modal = () => {
         >
           ✖
         </button>
-        <p>
+        <h2>
           <strong>{'Add a widget:'}</strong>
-        </p>
+        </h2>
         <div className="widget-button-container">{buttonList}</div>
       </div>
     </div>

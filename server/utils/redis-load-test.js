@@ -108,8 +108,8 @@ function runCacheFill(client) {
 }
 
 function getLeastRecentKey(client) {
-  for (let i = 0; i < 26; i++) {
-    client.get(`${i}`, generateRandomValue());
+  for (let i = 0; i < 50; i++) {
+    client.get(`${i}`);
   }
 }
 

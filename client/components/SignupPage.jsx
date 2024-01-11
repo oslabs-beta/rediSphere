@@ -1,10 +1,13 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { LOGIN_USER } from '../dashboardReducer.js';
+import { useDispatch } from 'react-redux';
 
 import Footer from './Footer';
 
 const SignupPage = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const handleClick = async () => {
     if (document.getElementById('password-1').value !== document.getElementById('password-2').value)
       return alert('passwords do not match. please try again.');
@@ -20,15 +23,18 @@ const SignupPage = () => {
     });
     const result = await response.json();
 
-    if (result === 'ok') return navigate('/connectredis');
+    if (result === 'ok') {
+      dispatch(LOGIN_USER());
+      return navigate('/connectredis');
+    }
 
     if (result === 'username taken')
       return alert('That username has been taken. Please choose another.');
   };
 
   return (
-    <div>
-      <h2>{'Sign up for Cache App'}</h2>
+    <div id="sign-up-page">
+      <h2>{'Sign up for rediSphere'}</h2>
 
       <div className="signup-box">
         <div>
