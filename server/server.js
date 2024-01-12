@@ -3,6 +3,7 @@ require('dotenv').config();
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
+const enforce = require('express-sslify');
 
 const apiRouter = require('./routes/api.js');
 const authRouter = require('./routes/authRouter.js');
@@ -11,6 +12,10 @@ const PORT = process.env.PORT || '3000';
 
 const app = express();
 
+//outside of dev environment, force SSL/HTTPS
+if (process.env.NODE_ENV !== 'development') {
+  app.use(enforce.HTTPS({ trustProtoHeader: true }));
+}
 // handle parsing request body
 app.use(cookieParser());
 app.use(express.json()); // parses body EXCEPT html
